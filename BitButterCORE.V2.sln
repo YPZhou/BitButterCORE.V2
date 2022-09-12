@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32106.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BitButterCORE.V2", "BitButterCORE.V2\BitButterCORE.V2.csproj", "{79FDC6C9-9AD2-4DEB-8FE7-20CADAFCD63B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitButterCORE.V2.Testing", "BitButterCORE.V2.Testing\BitButterCORE.V2.Testing.csproj", "{8CB5B1CC-ED75-4002-B7F4-898C240A2E77}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79FDC6C9-9AD2-4DEB-8FE7-20CADAFCD63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FDC6C9-9AD2-4DEB-8FE7-20CADAFCD63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FDC6C9-9AD2-4DEB-8FE7-20CADAFCD63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FDC6C9-9AD2-4DEB-8FE7-20CADAFCD63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CB5B1CC-ED75-4002-B7F4-898C240A2E77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CB5B1CC-ED75-4002-B7F4-898C240A2E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CB5B1CC-ED75-4002-B7F4-898C240A2E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CB5B1CC-ED75-4002-B7F4-898C240A2E77}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0223B5CA-9A58-45FE-929D-872E56963C1B}
+	EndGlobalSection
+EndGlobal
