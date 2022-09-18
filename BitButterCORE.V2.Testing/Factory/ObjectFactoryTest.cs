@@ -154,12 +154,64 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestHasChangesWhenRemoveJustAddedObject()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "pre-condition");
+
+			ObjectFactory.Instance.Remove(objectReference);
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "Removing just added object should cause no changes in ObjectFactory");
+		}
+
+		[Test]
+		public void TestHasChangesWhenRemoveAll()
+		{
+			ObjectFactory.Instance.Create<DummyObject>();
+			ObjectFactory.Instance.ClearChanges();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "pre-condition");
+
+			ObjectFactory.Instance.RemoveAll();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "ObjectFactory should have changes after remove all objects");
+
+			ObjectFactory.Instance.ClearChanges();
+			ObjectFactory.Instance.RemoveAll();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should not have changes when RemoveAll deletes no objects");
+
+			ObjectFactory.Instance.Create<DummyObject>();
+			ObjectFactory.Instance.RemoveAll();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should not have changes when RemoveAll only deletes just added object");
+		}
+
+		[Test]
+		public void TestHasChangesWhenRemoveAllByObjectType()
+		{
+			ObjectFactory.Instance.Create<DummyObject>();
+			ObjectFactory.Instance.Create<DummyObject>();
+			ObjectFactory.Instance.ClearChanges();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "pre-condition");
+
+			ObjectFactory.Instance.RemoveAll<DummyObject>();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "ObjectFactory should have changes after remove all DummyObjects");
+
+			ObjectFactory.Instance.ClearChanges();
+			ObjectFactory.Instance.RemoveAll<DummyObject2>();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should not have changes when no DummyObject2 is removed");
+
+			ObjectFactory.Instance.Create<DummyObject2>();
+			ObjectFactory.Instance.RemoveAll<DummyObject2>();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should not have changes when RemoveAll only deletes just added object");
+		}
+
+		[Test]
 		public void TestClearChanges()
 		{
 			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "pre-condition");
 
 			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
 			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "ObjectFactory should have changes after create object");
+
+			ObjectFactory.Instance.ClearChanges();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should not have changes after clear changes");
 
 			ObjectFactory.Instance.Remove(objectReference);
 			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "ObjectFactory should have changes after remove object");
@@ -190,6 +242,7 @@ namespace BitButterCORE.V2.Testing
 		{
 			var objectReference1 = ObjectFactory.Instance.Create<DummyObject>();
 			var objectReference2 = ObjectFactory.Instance.Create<DummyObject2>();
+			ObjectFactory.Instance.ClearChanges();
 
 			Assert.That(ObjectFactory.Instance.GetRemovedObjects().Count(), Is.EqualTo(0), "pre-condition");
 

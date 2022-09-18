@@ -28,7 +28,7 @@ namespace BitButterCORE.V2
 					var obj = (TObject)constructor.Invoke(inputParameters.ToArray());
 					AddObjectToFactory(obj);
 					result = obj.Reference;
-					AddObjectReferenceToFactoryChangeRecords(result, AddedObjects);
+					UpdateFactoryChangeRecordsForAddObject(result);
 				}
 				else if (matchingConstructors.Count() > 1)
 				{
@@ -93,7 +93,7 @@ namespace BitButterCORE.V2
 				if (Factory.ContainsKey(objectType) && Factory[objectType].ContainsKey(objectToRemove.ID))
 				{
 					Factory[objectType].Remove(objectToRemove.ID);
-					AddObjectReferenceToFactoryChangeRecords(reference, RemovedObjects);
+					UpdateFactoryChangeRecordsForRemoveObject(reference);
 				}
 			}
 		}
@@ -103,12 +103,22 @@ namespace BitButterCORE.V2
 			var objectType = typeof(TObject);
 			if (Factory.ContainsKey(objectType))
 			{
+				foreach (var reference in Factory[objectType].Values.Select(obj => obj.Reference))
+				{
+					UpdateFactoryChangeRecordsForRemoveObject(reference);
+				}
+
 				Factory[objectType].Clear();
 			}
 		}
 
 		public void RemoveAll()
 		{
+			foreach (var reference in Factory.SelectMany(pair => pair.Value.Values).Select(obj => obj.Reference))
+			{
+				UpdateFactoryChangeRecordsForRemoveObject(reference);
+			}
+
 			Factory.Clear();
 		}
 
@@ -132,6 +142,28 @@ namespace BitButterCORE.V2
 		{
 			AddedObjects.Clear();
 			RemovedObjects.Clear();
+		}
+
+		void UpdateFactoryChangeRecordsForAddObject(ObjectReference reference)
+		{
+			AddObjectReferenceToFactoryChangeRecords(reference, AddedObjects);
+		}
+
+		void UpdateFactoryChangeRecordsForRemoveObject(ObjectReference reference)
+		{
+			var objectType = reference.Type;
+			if (AddedObjects.ContainsKey(objectType) && addedObjects[objectType].Contains(reference))
+			{
+				AddedObjects[objectType].Remove(reference);
+				if (AddedObjects[objectType].Count == 0)
+				{
+					AddedObjects.Remove(objectType);
+				}
+			}
+			else
+			{
+				AddObjectReferenceToFactoryChangeRecords(reference, RemovedObjects);
+			}
 		}
 
 		void AddObjectReferenceToFactoryChangeRecords(ObjectReference reference, Dictionary<Type, List<ObjectReference>> factoryChangeRecords)
