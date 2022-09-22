@@ -279,5 +279,16 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(ObjectFactory.Instance.Query<DummyObject2>().Count(), Is.EqualTo(1), "Should find 1 dummy object 2");
 			Assert.That(ObjectFactory.Instance.Query<BaseObject>().Count(), Is.EqualTo(2), "Should find both dummy objects as they all inherit from BaseObject");
 		}
+
+		[Test]
+		public void TestQueryFirst()
+		{
+			var dummyObject1 = ObjectFactory.Instance.Create<DummyObject>();
+			var dummyObject2 = ObjectFactory.Instance.Create<DummyObject>();
+
+			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject>().ID, Is.EqualTo(dummyObject1.ID), "Should find 1st dummy object");
+			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject>(obj => obj.ID == dummyObject2.ID).ID, Is.EqualTo(dummyObject2.ID), "Should find 2nd dummy object when query with predicate");
+			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject2>(), Is.EqualTo(default(ObjectReference)), "Should return default reference when no object is found");
+		}
 	}
 }

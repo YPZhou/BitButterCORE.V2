@@ -237,6 +237,8 @@ namespace BitButterCORE.V2
 			}
 		}
 
+		public ObjectReference QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject => Query(predicate).FirstOrDefault();
+
 		void AddObjectToFactory(BaseObject objectToAdd)
 		{
 			if (objectToAdd != null)
