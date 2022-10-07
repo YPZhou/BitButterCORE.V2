@@ -9,12 +9,16 @@ namespace BitButterCORE.V2
 	{
 		public ObjectReference Create<TObject>(params object[] args) where TObject : BaseObject
 		{
+			return Create(typeof(TObject), args);
+		}
+
+		public ObjectReference Create(Type objectType, params object[] args)
+		{
 			var result = default(ObjectReference);
-			var objectType = typeof(TObject);
 			if (!objectType.IsAbstract)
 			{
-				var newID = GetObjectIDFountain<TObject>().NextID;
-				var constructors = typeof(TObject).GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+				var newID = GetObjectIDFountain(objectType).NextID;
+				var constructors = objectType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 				var matchingConstructors = FindMatchingConstructors(constructors, args);
 				if (matchingConstructors.Count() == 1)
 				{
@@ -25,18 +29,18 @@ namespace BitButterCORE.V2
 						inputParameters = inputParameters.Concat(constructor.GetParameters().Skip(inputParameters.Count()).Select(x => x.DefaultValue));
 					}
 
-					var obj = (TObject)constructor.Invoke(inputParameters.ToArray());
+					var obj = (BaseObject)constructor.Invoke(inputParameters.ToArray());
 					AddObjectToFactory(obj);
 					result = obj.Reference;
 					UpdateFactoryChangeRecordsForAddObject(result);
 				}
 				else if (matchingConstructors.Count() > 1)
 				{
-					throw new InvalidOperationException(string.Format("Instantiation of {0} failed as multiple matching constructors found for parameters ({1}).", typeof(TObject).FullName, string.Join(", ", args)));
+					throw new InvalidOperationException(string.Format("Instantiation of {0} failed as multiple matching constructors found for parameters ({1}).", objectType.FullName, string.Join(", ", args)));
 				}
 				else
 				{
-					throw new InvalidOperationException(string.Format("Instantiation of {0} failed as no matching constructor found for parameters ({1}).", typeof(TObject).FullName, string.Join(", ", args)));
+					throw new InvalidOperationException(string.Format("Instantiation of {0} failed as no matching constructor found for parameters ({1}).", objectType.FullName, string.Join(", ", args)));
 				}
 			}
 			return result;
@@ -259,9 +263,8 @@ namespace BitButterCORE.V2
 		Dictionary<Type, Dictionary<uint, BaseObject>> Factory => factory ?? (factory = new Dictionary<Type, Dictionary<uint, BaseObject>>());
 		Dictionary<Type, Dictionary<uint, BaseObject>> factory;
 
-		ObjectIDFountain GetObjectIDFountain<TObject>() where TObject : BaseObject
+		ObjectIDFountain GetObjectIDFountain(Type objectType)
 		{
-			var objectType = typeof(TObject);
 			if (!IDFountains.ContainsKey(objectType))
 			{
 				IDFountains.Add(objectType, new ObjectIDFountain());

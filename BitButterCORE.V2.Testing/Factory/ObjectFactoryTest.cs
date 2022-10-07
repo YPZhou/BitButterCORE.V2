@@ -61,6 +61,19 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestCreateWithTypeParameter()
+		{
+			var objectReference = ObjectFactory.Instance.Create(typeof(DummyObject));
+			Assert.That(objectReference.IsValid, Is.True, "Create with type parameter should work for empty parameter list");
+
+			objectReference = ObjectFactory.Instance.Create(typeof(DummyObjectWithMultipleConstructor), 2);
+			Assert.That(objectReference.IsValid, Is.True, "Create with type parameter should work for explicitly given parameter");
+
+			objectReference = ObjectFactory.Instance.Create(typeof(DummyObjectWithDefaultParameterInConstructor));
+			Assert.That(objectReference.IsValid, Is.True, "Create with type parameter should work for default parameter");
+		}
+
+		[Test]
 		public void TestRemove()
 		{
 			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
