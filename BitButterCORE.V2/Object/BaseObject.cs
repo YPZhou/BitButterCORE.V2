@@ -18,5 +18,10 @@ namespace BitButterCORE.V2
 		public uint ID { get; }
 
 		public ObjectReference Reference { get; }
+
+		public override string ToString()
+		{
+			return string.Format("{0}{1}", GetType().Name, ID);
+		}
 	}
 }

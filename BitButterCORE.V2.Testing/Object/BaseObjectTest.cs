@@ -36,5 +36,18 @@ namespace BitButterCORE.V2.Testing
 			var object2 = ObjectFactory.Instance.Create<DummyObject>().Object;
 			Assert.That(object2.ID, Is.EqualTo(2), "object2 should have ID equal to 2");
 		}
+
+		[Test]
+		public void TestToString()
+		{
+			var object1 = ObjectFactory.Instance.Create<DummyObject>().Object;
+			Assert.That(object1.ToString(), Is.EqualTo("DummyObject1"));
+
+			var object2 = ObjectFactory.Instance.Create<DummyObject>().Object;
+			Assert.That(object2.ToString(), Is.EqualTo("DummyObject2"));
+
+			var object3 = ObjectFactory.Instance.Create<DummyObject2>().Object;
+			Assert.That(object3.ToString(), Is.EqualTo("DummyObject21"));
+		}
 	}
 }
