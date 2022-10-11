@@ -14,7 +14,7 @@ namespace BitButterCORE.V2
 				{
 					var target = handler.Item1;
 					var args = eventArgs.Length > 0 ? new object[] { eventArgs } : new object[] { null };
-					if (target is ObjectReference reference)
+					if (target is IObjectReference reference)
 					{
 						if (reference.IsValid)
 						{
@@ -34,7 +34,7 @@ namespace BitButterCORE.V2
 		bool ShouldRemoveHandler(Tuple<object, MethodInfo> handlerTuple)
 		{
 			var result = false;
-			if (handlerTuple.Item1 is ObjectReference reference)
+			if (handlerTuple.Item1 is IObjectReference reference)
 			{
 				result = !reference.IsValid;
 			}

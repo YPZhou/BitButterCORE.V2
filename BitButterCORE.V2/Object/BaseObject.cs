@@ -4,10 +4,16 @@ namespace BitButterCORE.V2
 {
 	public abstract class BaseObject
 	{
+		public abstract uint ID { get; }
+		public abstract IObjectReference Reference { get; }
+	}
+
+	public abstract class BaseObject<TObject> : BaseObject where TObject : BaseObject
+	{
 		protected BaseObject(uint id)
 		{
 			ID = id;
-			Reference = new ObjectReference(GetType(), ID);
+			TypedReference = CreateTypedReference();
 
 			if (!ObjectFactory.Instance.IsObjectIDUsed(GetType(), ID))
 			{
@@ -15,9 +21,17 @@ namespace BitButterCORE.V2
 			}
 		}
 
-		public uint ID { get; }
+		IObjectReference<TObject> CreateTypedReference()
+		{
+			var referenceType = typeof(ObjectReference<>).MakeGenericType(GetType());
+			return (IObjectReference<TObject>)Activator.CreateInstance(referenceType, ID);
+		}
 
-		public ObjectReference Reference { get; }
+		public override uint ID { get; }
+
+		public IObjectReference<TObject> TypedReference { get; }
+
+		public override IObjectReference Reference => TypedReference;
 
 		public override string ToString()
 		{
