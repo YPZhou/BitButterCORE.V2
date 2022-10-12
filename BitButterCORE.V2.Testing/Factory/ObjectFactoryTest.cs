@@ -61,6 +61,13 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestCreateWithNullParameter()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObjectWithNullableParameterInConstructor>(new object[] { null });
+			Assert.That(objectReference.IsValid, Is.True, "Create object with null parameter should not fail");
+		}
+
+		[Test]
 		public void TestCreateWithTypeParameter()
 		{
 			var objectReference = ObjectFactory.Instance.Create(typeof(DummyObject));

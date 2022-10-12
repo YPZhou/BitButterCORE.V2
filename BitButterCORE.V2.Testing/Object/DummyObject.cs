@@ -52,6 +52,14 @@
 		}
 	}
 
+	public class DummyObjectWithNullableParameterInConstructor : BaseObject<DummyObjectWithNullableParameterInConstructor>
+	{
+		public DummyObjectWithNullableParameterInConstructor(uint id, object obj)
+			: base(id)
+		{
+		}
+	}
+
 	public class DummyObjectWithEventHandler : BaseObject<DummyObjectWithEventHandler>
 	{
 		public DummyObjectWithEventHandler(uint id)

@@ -64,7 +64,7 @@ namespace BitButterCORE.V2
 							{
 								var inputParameter = inputParameters.ElementAt(inputParameterIndex);
 								var parameterType = parameter.ParameterType;
-								if (!parameterType.IsAssignableFrom(inputParameter.GetType()))
+								if (inputParameter != null && !parameterType.IsAssignableFrom(inputParameter.GetType()))
 								{
 									result = false;
 								}
