@@ -7,14 +7,14 @@ namespace BitButterCORE.V2
 {
 	public class ObjectFactory : BaseSingleton<ObjectFactory>
 	{
-		public ObjectReference Create<TObject>(params object[] args) where TObject : BaseObject
+		public IObjectReference<TObject> Create<TObject>(params object[] args) where TObject : BaseObject
 		{
-			return Create(typeof(TObject), args);
+			return (IObjectReference<TObject>)Create(typeof(TObject), args);
 		}
 
-		public ObjectReference Create(Type objectType, params object[] args)
+		public IObjectReference Create(Type objectType, params object[] args)
 		{
-			var result = default(ObjectReference);
+			var result = default(IObjectReference);
 			if (!objectType.IsAbstract)
 			{
 				var newID = GetObjectIDFountain(objectType).NextID;
@@ -64,7 +64,7 @@ namespace BitButterCORE.V2
 							{
 								var inputParameter = inputParameters.ElementAt(inputParameterIndex);
 								var parameterType = parameter.ParameterType;
-								if (!parameterType.IsAssignableFrom(inputParameter.GetType()))
+								if (inputParameter != null && !parameterType.IsAssignableFrom(inputParameter.GetType()))
 								{
 									result = false;
 								}
@@ -88,7 +88,7 @@ namespace BitButterCORE.V2
 			});
 		}
 
-		public void Remove(ObjectReference reference)
+		public void Remove(IObjectReference reference)
 		{
 			var objectToRemove = GetObjectByReference(reference);
 			if (objectToRemove != null)
@@ -148,12 +148,12 @@ namespace BitButterCORE.V2
 			RemovedObjects.Clear();
 		}
 
-		void UpdateFactoryChangeRecordsForAddObject(ObjectReference reference)
+		void UpdateFactoryChangeRecordsForAddObject(IObjectReference reference)
 		{
 			AddObjectReferenceToFactoryChangeRecords(reference, AddedObjects);
 		}
 
-		void UpdateFactoryChangeRecordsForRemoveObject(ObjectReference reference)
+		void UpdateFactoryChangeRecordsForRemoveObject(IObjectReference reference)
 		{
 			var objectType = reference.Type;
 			if (AddedObjects.ContainsKey(objectType) && addedObjects[objectType].Contains(reference))
@@ -170,35 +170,35 @@ namespace BitButterCORE.V2
 			}
 		}
 
-		void AddObjectReferenceToFactoryChangeRecords(ObjectReference reference, Dictionary<Type, List<ObjectReference>> factoryChangeRecords)
+		void AddObjectReferenceToFactoryChangeRecords(IObjectReference reference, Dictionary<Type, List<IObjectReference>> factoryChangeRecords)
 		{
 			var objectType = reference.Type;
 			if (!factoryChangeRecords.ContainsKey(objectType))
 			{
-				factoryChangeRecords.Add(objectType, new List<ObjectReference>());
+				factoryChangeRecords.Add(objectType, new List<IObjectReference>());
 			}
 			factoryChangeRecords[objectType].Add(reference);
 		}
 
-		public IEnumerable<ObjectReference> GetAddedObjects()
+		public IEnumerable<IObjectReference> GetAddedObjects()
 		{
 			return AddedObjects.SelectMany(x => x.Value);
 		}
 
-		public IEnumerable<ObjectReference> GetRemovedObjects()
+		public IEnumerable<IObjectReference> GetRemovedObjects()
 		{
 			return RemovedObjects.SelectMany(x => x.Value);
 		}
 
-		Dictionary<Type, List<ObjectReference>> AddedObjects => addedObjects ?? (addedObjects = new Dictionary<Type, List<ObjectReference>>());
-		Dictionary<Type, List<ObjectReference>> addedObjects;
+		Dictionary<Type, List<IObjectReference>> AddedObjects => addedObjects ?? (addedObjects = new Dictionary<Type, List<IObjectReference>>());
+		Dictionary<Type, List<IObjectReference>> addedObjects;
 
-		Dictionary<Type, List<ObjectReference>> RemovedObjects => removedObjects ?? (removedObjects = new Dictionary<Type, List<ObjectReference>>());
-		Dictionary<Type, List<ObjectReference>> removedObjects;
+		Dictionary<Type, List<IObjectReference>> RemovedObjects => removedObjects ?? (removedObjects = new Dictionary<Type, List<IObjectReference>>());
+		Dictionary<Type, List<IObjectReference>> removedObjects;
 
-		internal bool HasObjectWithReference(ObjectReference reference) => Factory.ContainsKey(reference.Type) && Factory[reference.Type].ContainsKey(reference.ID);
+		internal bool HasObjectWithReference(IObjectReference reference) => Factory.ContainsKey(reference.Type) && Factory[reference.Type].ContainsKey(reference.ID);
 
-		internal BaseObject GetObjectByReference(ObjectReference reference) => GetObjectByTypeAndID(reference.Type, reference.ID);
+		internal BaseObject GetObjectByReference(IObjectReference reference) => GetObjectByTypeAndID(reference.Type, reference.ID);
 
 		BaseObject GetObjectByTypeAndID(Type type, uint id)
 		{
@@ -210,7 +210,7 @@ namespace BitButterCORE.V2
 			return result;
 		}
 
-		public IEnumerable<ObjectReference> Query<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject
+		public IEnumerable<IObjectReference<TObject>> Query<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject
 		{
 			var objectType = typeof(TObject);
 			var objectCollection = new List<TObject>();
@@ -235,13 +235,13 @@ namespace BitButterCORE.V2
 					var queryResult = predicate?.Invoke(obj) ?? true;
 					if (queryResult)
 					{
-						yield return obj.Reference;
+						yield return (IObjectReference<TObject>)obj.Reference;
 					}
 				}
 			}
 		}
 
-		public ObjectReference QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject => Query(predicate).FirstOrDefault();
+		public IObjectReference<TObject> QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject => Query(predicate).FirstOrDefault();
 
 		void AddObjectToFactory(BaseObject objectToAdd)
 		{

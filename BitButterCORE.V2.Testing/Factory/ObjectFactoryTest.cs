@@ -43,10 +43,10 @@ namespace BitButterCORE.V2.Testing
 		public void TestCreateWithDefaultParameter()
 		{
 			var objectReferenceWithDefaultParam = ObjectFactory.Instance.Create<DummyObjectWithDefaultParameterInConstructor>();
-			Assert.That(objectReferenceWithDefaultParam.GetObject<DummyObjectWithDefaultParameterInConstructor>().DefaultParam, Is.EqualTo(1), "DefaultParam should be default value 1");
+			Assert.That(objectReferenceWithDefaultParam.Object.DefaultParam, Is.EqualTo(1), "DefaultParam should be default value 1");
 
 			var objectReferenceWithExplicitParam = ObjectFactory.Instance.Create<DummyObjectWithDefaultParameterInConstructor>(2);
-			Assert.That(objectReferenceWithExplicitParam.GetObject<DummyObjectWithDefaultParameterInConstructor>().DefaultParam, Is.EqualTo(2), "DefaultParam should be explicit value 2");
+			Assert.That(objectReferenceWithExplicitParam.Object.DefaultParam, Is.EqualTo(2), "DefaultParam should be explicit value 2");
 		}
 
 		[Test]
@@ -58,6 +58,13 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(() => ObjectFactory.Instance.Create<DummyObjectWithMultipleConstructor>(),
 				Throws.InvalidOperationException.With.Message.EqualTo("Instantiation of BitButterCORE.V2.Testing.DummyObjectWithMultipleConstructor failed as multiple matching constructors found for parameters ()."),
 				"Should throw exception when multiple matching constructors found");
+		}
+
+		[Test]
+		public void TestCreateWithNullParameter()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObjectWithNullableParameterInConstructor>(new object[] { null });
+			Assert.That(objectReference.IsValid, Is.True, "Create object with null parameter should not fail");
 		}
 
 		[Test]
@@ -301,7 +308,7 @@ namespace BitButterCORE.V2.Testing
 
 			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject>().ID, Is.EqualTo(dummyObject1.ID), "Should find 1st dummy object");
 			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject>(obj => obj.ID == dummyObject2.ID).ID, Is.EqualTo(dummyObject2.ID), "Should find 2nd dummy object when query with predicate");
-			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject2>(), Is.EqualTo(default(ObjectReference)), "Should return default reference when no object is found");
+			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject2>(), Is.EqualTo(default(IObjectReference)), "Should return default reference when no object is found");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace BitButterCORE.V2.Testing
 {
-	public class DummyObject : BaseObject
+	public class DummyObject : BaseObject<DummyObject>
 	{
 		public DummyObject(uint id)
 			: base(id)
@@ -10,7 +10,7 @@
 		public string Name => string.Format("DummyObject{0}", ID);
 	}
 
-	public class DummyObject2 : BaseObject
+	public class DummyObject2 : BaseObject<DummyObject2>
 	{
 		public DummyObject2(uint id)
 			: base(id)
@@ -20,7 +20,15 @@
 		public string Name => "DummyObject2";
 	}
 
-	public class DummyObjectWithDefaultParameterInConstructor : BaseObject
+	public class DerivedDummyObject : DummyObject
+	{
+		public DerivedDummyObject(uint id)
+			: base(id)
+		{
+		}
+	}
+
+	public class DummyObjectWithDefaultParameterInConstructor : BaseObject<DummyObjectWithDefaultParameterInConstructor>
 	{
 		public DummyObjectWithDefaultParameterInConstructor(uint id, int defaultParam = 1)
 			: base(id)
@@ -31,7 +39,7 @@
 		public int DefaultParam { get; }
 	}
 
-	public class DummyObjectWithMultipleConstructor : BaseObject
+	public class DummyObjectWithMultipleConstructor : BaseObject<DummyObjectWithMultipleConstructor>
 	{
 		public DummyObjectWithMultipleConstructor(uint id)
 			: base(id)
@@ -44,7 +52,15 @@
 		}
 	}
 
-	public class DummyObjectWithEventHandler : BaseObject
+	public class DummyObjectWithNullableParameterInConstructor : BaseObject<DummyObjectWithNullableParameterInConstructor>
+	{
+		public DummyObjectWithNullableParameterInConstructor(uint id, object obj)
+			: base(id)
+		{
+		}
+	}
+
+	public class DummyObjectWithEventHandler : BaseObject<DummyObjectWithEventHandler>
 	{
 		public DummyObjectWithEventHandler(uint id)
 			: base(id)

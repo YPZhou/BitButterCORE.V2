@@ -2,11 +2,27 @@
 
 namespace BitButterCORE.V2
 {
-	public struct ObjectReference
+	public interface IObjectReference
 	{
-		public ObjectReference(Type type, uint id)
+		Type Type { get; }
+
+		uint ID { get; }
+
+		bool IsValid { get; }
+
+		BaseObject Object { get; }
+	}
+
+	public interface IObjectReference<out TObject> : IObjectReference
+	{
+		new TObject Object { get; }
+	}
+
+	public struct ObjectReference<TObject> : IObjectReference<TObject> where TObject : BaseObject
+	{
+		public ObjectReference(uint id)
 		{
-			Type = type;
+			Type = typeof(TObject);
 			ID = id;
 		}
 
@@ -14,20 +30,13 @@ namespace BitButterCORE.V2
 
 		public uint ID { get; }
 
-		public BaseObject Object => IsValid ? ObjectFactory.Instance.GetObjectByReference(this) : default(BaseObject);
+		public TObject Object => IsValid ? (TObject)ObjectFactory.Instance.GetObjectByReference(this) : default(TObject);
 
-		public T GetObject<T>() where T : BaseObject => IsValid && (Type == typeof(T) || typeof(T).IsAssignableFrom(Type)) ? Object as T : default; 
+		BaseObject IObjectReference.Object => Object;
 
 		public bool IsValid => Type != null && ID > 0 && ObjectFactory.Instance.HasObjectWithReference(this);
 
-		public bool IsValidByTypeAndID<T>(uint id) where T : BaseObject
-		{
-			return (Type == typeof(T) || typeof(T).IsAssignableFrom(Type))
-				&& ID == id
-				&& IsValid;
-		}
-
-		public static bool operator == (ObjectReference ref1, ObjectReference ref2)
+		public static bool operator == (ObjectReference<TObject> ref1, ObjectReference<TObject> ref2)
 		{
 			if ((object)ref1 == null)
 			{
@@ -37,7 +46,7 @@ namespace BitButterCORE.V2
 			return ref1.Equals(ref2);
 		}
 
-		public static bool operator != (ObjectReference ref1, ObjectReference ref2)
+		public static bool operator != (ObjectReference<TObject> ref1, ObjectReference<TObject> ref2)
 		{
 			return !(ref1 == ref2);
 		}
@@ -49,7 +58,7 @@ namespace BitButterCORE.V2
 				return false;
 			}
 
-			var ref2 = (ObjectReference)obj;
+			var ref2 = (ObjectReference<TObject>)obj;
 			return Type == ref2.Type && ID == ref2.ID;
 		}
 
