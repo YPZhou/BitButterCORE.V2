@@ -47,7 +47,7 @@ namespace BitButterCORE.V2.Testing
 			ObjectFactory.Instance.Remove(dummyObject2);
 			EventManager.Instance.RaiseEvent("TestEvent");
 
-			Assert.That(DummyObjectWithEventHandler.TotalUpdateCalledCount, Is.EqualTo(3), "TestEvent handler should be invoked 3 times as handler for dummyPbject2 is not invoked");
+			Assert.That(DummyObjectWithEventHandler.TotalUpdateCalledCount, Is.EqualTo(3), "TestEvent handler should be invoked 3 times as handler for dummyObject2 is not invoked");
 			Assert.That((dummyObject1.Object).UpdateCalledCount, Is.EqualTo(2), "TestEvent handler is invoked twice for dummyObject1");
 		}
 

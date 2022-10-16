@@ -18,12 +18,16 @@ namespace BitButterCORE.V2
 					{
 						if (reference.IsValid)
 						{
+							EventCallStack.Instance.StartChildFrame(new EventCallFrame());
 							handler.Item2.Invoke(reference.Object, args);
+							EventCallStack.Instance.EndChildFrame();
 						}
 					}
 					else
 					{
+						EventCallStack.Instance.StartChildFrame(new EventCallFrame());
 						handler.Item2.Invoke(target, args);
+						EventCallStack.Instance.EndChildFrame();
 					}
 				}
 
