@@ -297,7 +297,7 @@ namespace BitButterCORE.V2.Testing
 
 			Assert.That(ObjectFactory.Instance.Query<DummyObject>().Count(), Is.EqualTo(1), "Should find 1 dummy object");
 			Assert.That(ObjectFactory.Instance.Query<DummyObject2>().Count(), Is.EqualTo(1), "Should find 1 dummy object 2");
-			Assert.That(ObjectFactory.Instance.Query<BaseObject>().Count(), Is.EqualTo(2), "Should find both dummy objects as they all inherit from BaseObject");
+			Assert.That(ObjectFactory.Instance.Query<IBaseObject>().Count(), Is.EqualTo(2), "Should find both dummy objects as they all implement IBaseObject");
 		}
 
 		[Test]

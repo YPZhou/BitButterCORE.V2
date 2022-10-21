@@ -39,15 +39,15 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
-		public void TestTypedReference()
+		public void TestReference()
 		{
 			var baseObject = ObjectFactory.Instance.Create<DummyObject>().Object;
-			Assert.That(baseObject.TypedReference.GetType(), Is.EqualTo(typeof(ObjectReference<DummyObject>)), "TypedReference of baseObject should be of correct type");
-			Assert.That(baseObject.TypedReference.Object, Is.EqualTo(baseObject), "TypedReference should return baseObject");
+			Assert.That(baseObject.Reference.GetType(), Is.EqualTo(typeof(ObjectReference<DummyObject>)), "Reference of baseObject should be of correct type");
+			Assert.That(baseObject.Reference.Object, Is.EqualTo(baseObject), "Reference should return baseObject");
 
 			var derivedObject = ObjectFactory.Instance.Create<DerivedDummyObject>().Object;
-			Assert.That(derivedObject.TypedReference.GetType(), Is.EqualTo(typeof(ObjectReference<DerivedDummyObject>)), "TypedReference of derivedObject should be of correct type");
-			Assert.That(derivedObject.TypedReference.Object, Is.EqualTo(derivedObject), "TypedReference should return derivedObject");
+			Assert.That(derivedObject.Reference.GetType(), Is.EqualTo(typeof(ObjectReference<DerivedDummyObject>)), "Reference of derivedObject should be of correct type");
+			Assert.That(derivedObject.Reference.Object, Is.EqualTo(derivedObject), "Reference should return derivedObject");
 		}
 
 		[Test]
