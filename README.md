@@ -8,7 +8,7 @@
 
 例如，我们定义游戏的角色类Character：
 ``` cs
-public class Character : BaseObject
+public class Character : BaseObject<Character>
 {
     // 确保构造函数为public
     public Character(uint id)
@@ -45,7 +45,7 @@ ObjectFactory.Instance.Remove(character); // 删除character指向的对象
 我们定义以下游戏对象类：
 ``` cs
 // 角色抽象基类
-public abstract class Character : BaseObject
+public abstract class Character : BaseObject<Character>
 {
     public Character(uint id)
         : base(id)
@@ -89,7 +89,7 @@ ObjectFactory.Instance.Create<Monster>(1);
 ObjectFactory.Instance.Create<Monster>(3);
 
 // 按类型查询
-var allObjects = ObjectFactory.Instance.Query<BaseObject>(); // 返回工厂中所有对象实例的ObjectReference
+var allObjects = ObjectFactory.Instance.Query<IBaseObject>(); // 返回工厂中所有对象实例的ObjectReference，注意这里需要使用接口IBaseObject进行查询
 var allCharacters = ObjectFactory.Instance.Query<Character>(); // 返回工厂中所有角色类实例的ObjectReference，在这个例子中查询结果与上一条查询相同
 var allHeros = ObjectFactory.Instance.Query<Hero>(); // 返回工厂中所有英雄类实例的ObjectReference
 
