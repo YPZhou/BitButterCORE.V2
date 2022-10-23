@@ -52,7 +52,7 @@ namespace BitButterCORE.V2
 				Handlers.Add(eventName, new List<Tuple<object, MethodInfo>>());
 			}
 
-			var target = handlerToAdd.Target is BaseObject obj ? obj.Reference : handlerToAdd.Target;
+			var target = handlerToAdd.Target is IBaseObject obj ? obj.Reference : handlerToAdd.Target;
 			var method = handlerToAdd.Method;
 			var handlerTuple = Tuple.Create(target, method);
 			if (!Handlers[eventName].Contains(handlerTuple))

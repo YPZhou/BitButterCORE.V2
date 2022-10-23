@@ -10,7 +10,7 @@ namespace BitButterCORE.V2
 
 		bool IsValid { get; }
 
-		BaseObject Object { get; }
+		IBaseObject Object { get; }
 	}
 
 	public interface IObjectReference<out TObject> : IObjectReference
@@ -18,7 +18,7 @@ namespace BitButterCORE.V2
 		new TObject Object { get; }
 	}
 
-	public struct ObjectReference<TObject> : IObjectReference<TObject> where TObject : BaseObject
+	public struct ObjectReference<TObject> : IObjectReference<TObject> where TObject : IBaseObject
 	{
 		public ObjectReference(uint id)
 		{
@@ -32,7 +32,7 @@ namespace BitButterCORE.V2
 
 		public TObject Object => IsValid ? (TObject)ObjectFactory.Instance.GetObjectByReference(this) : default(TObject);
 
-		BaseObject IObjectReference.Object => Object;
+		IBaseObject IObjectReference.Object => Object;
 
 		public bool IsValid => Type != null && ID > 0 && ObjectFactory.Instance.HasObjectWithReference(this);
 

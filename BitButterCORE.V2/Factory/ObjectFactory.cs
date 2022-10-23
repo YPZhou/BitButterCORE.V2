@@ -7,7 +7,7 @@ namespace BitButterCORE.V2
 {
 	public class ObjectFactory : BaseSingleton<ObjectFactory>
 	{
-		public IObjectReference<TObject> Create<TObject>(params object[] args) where TObject : BaseObject
+		public IObjectReference<TObject> Create<TObject>(params object[] args) where TObject : IBaseObject
 		{
 			return (IObjectReference<TObject>)Create(typeof(TObject), args);
 		}
@@ -29,7 +29,7 @@ namespace BitButterCORE.V2
 						inputParameters = inputParameters.Concat(constructor.GetParameters().Skip(inputParameters.Count()).Select(x => x.DefaultValue));
 					}
 
-					var obj = (BaseObject)constructor.Invoke(inputParameters.ToArray());
+					var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 					AddObjectToFactory(obj);
 					result = obj.Reference;
 					UpdateFactoryChangeRecordsForAddObject(result);
@@ -198,11 +198,11 @@ namespace BitButterCORE.V2
 
 		internal bool HasObjectWithReference(IObjectReference reference) => Factory.ContainsKey(reference.Type) && Factory[reference.Type].ContainsKey(reference.ID);
 
-		internal BaseObject GetObjectByReference(IObjectReference reference) => GetObjectByTypeAndID(reference.Type, reference.ID);
+		internal IBaseObject GetObjectByReference(IObjectReference reference) => GetObjectByTypeAndID(reference.Type, reference.ID);
 
-		BaseObject GetObjectByTypeAndID(Type type, uint id)
+		IBaseObject GetObjectByTypeAndID(Type type, uint id)
 		{
-			var result = default(BaseObject);
+			var result = default(IBaseObject);
 			if (Factory.ContainsKey(type) && Factory[type].ContainsKey(id))
 			{
 				result = Factory[type][id];
@@ -210,7 +210,7 @@ namespace BitButterCORE.V2
 			return result;
 		}
 
-		public IEnumerable<IObjectReference<TObject>> Query<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject
+		public IEnumerable<IObjectReference<TObject>> Query<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject
 		{
 			var objectType = typeof(TObject);
 			var objectCollection = new List<TObject>();
@@ -241,16 +241,16 @@ namespace BitButterCORE.V2
 			}
 		}
 
-		public IObjectReference<TObject> QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : BaseObject => Query(predicate).FirstOrDefault();
+		public IObjectReference<TObject> QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject => Query(predicate).FirstOrDefault();
 
-		void AddObjectToFactory(BaseObject objectToAdd)
+		void AddObjectToFactory(IBaseObject objectToAdd)
 		{
 			if (objectToAdd != null)
 			{
 				var objectType = objectToAdd.GetType();
 				if (!Factory.ContainsKey(objectType))
 				{
-					Factory.Add(objectType, new Dictionary<uint, BaseObject>());
+					Factory.Add(objectType, new Dictionary<uint, IBaseObject>());
 				}
 
 				if (!Factory[objectType].ContainsKey(objectToAdd.ID))
@@ -260,8 +260,8 @@ namespace BitButterCORE.V2
 			}
 		}
 
-		Dictionary<Type, Dictionary<uint, BaseObject>> Factory => factory ?? (factory = new Dictionary<Type, Dictionary<uint, BaseObject>>());
-		Dictionary<Type, Dictionary<uint, BaseObject>> factory;
+		Dictionary<Type, Dictionary<uint, IBaseObject>> Factory => factory ?? (factory = new Dictionary<Type, Dictionary<uint, IBaseObject>>());
+		Dictionary<Type, Dictionary<uint, IBaseObject>> factory;
 
 		ObjectIDFountain GetObjectIDFountain(Type objectType)
 		{

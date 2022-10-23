@@ -60,7 +60,7 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestDefaultObjectReferenceIsInvalid()
 		{
-			var defaultReference = default(ObjectReference<BaseObject>);
+			var defaultReference = default(ObjectReference<IBaseObject>);
 			Assert.That(defaultReference.IsValid, Is.False, "Default reference is not valid");
 		}
 	}
