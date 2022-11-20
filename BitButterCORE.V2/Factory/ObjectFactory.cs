@@ -148,6 +148,27 @@ namespace BitButterCORE.V2
 			RemovedObjects.Clear();
 		}
 
+		public void ClearChangesForObject(IObjectReference reference)
+		{
+			if (AddedObjects.ContainsKey(reference.Type))
+			{
+				AddedObjects[reference.Type].Remove(reference);
+				if (AddedObjects[reference.Type].Count == 0)
+				{
+					AddedObjects.Remove(reference.Type);
+				}
+			}
+
+			if (RemovedObjects.ContainsKey(reference.Type))
+			{
+				RemovedObjects[reference.Type].Remove(reference);
+				if (RemovedObjects[reference.Type].Count == 0)
+				{
+					RemovedObjects.Remove(reference.Type);
+				}
+			}
+		}
+
 		void UpdateFactoryChangeRecordsForAddObject(IObjectReference reference)
 		{
 			AddObjectReferenceToFactoryChangeRecords(reference, AddedObjects);

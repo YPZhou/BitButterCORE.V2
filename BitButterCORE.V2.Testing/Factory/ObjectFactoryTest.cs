@@ -241,6 +241,24 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestClearChangesForObject()
+		{
+			var objectReference1 = ObjectFactory.Instance.Create<DummyObject>();
+			var objectReference2 = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "pre-condition");
+			Assert.That(ObjectFactory.Instance.GetAddedObjects(), Does.Contain(objectReference1), "pre-condition");
+			Assert.That(ObjectFactory.Instance.GetAddedObjects(), Does.Contain(objectReference2), "pre-condition");
+
+			ObjectFactory.Instance.ClearChangesForObject(objectReference1);
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(true), "ObjectFactory should still has change after remove changes for first object");
+			Assert.That(ObjectFactory.Instance.GetAddedObjects(), Does.Not.Contain(objectReference1), "ObjectFactory should have no record for adding first object");
+			Assert.That(ObjectFactory.Instance.GetAddedObjects(), Does.Contain(objectReference2), "ObjectFactory should have record for adding second object");
+
+			ObjectFactory.Instance.ClearChangesForObject(objectReference2);
+			Assert.That(ObjectFactory.Instance.HasChanges, Is.EqualTo(false), "ObjectFactory should have no changes after remove changes for both objects");
+		}
+
+		[Test]
 		public void TestGetAddedObjects()
 		{
 			Assert.That(ObjectFactory.Instance.GetAddedObjects().Count(), Is.EqualTo(0), "pre-condition");
