@@ -2,7 +2,7 @@
 
 namespace BitButterCORE.V2
 {
-	public interface IObjectReference
+	public interface IObjectReference : IEventHandler
 	{
 		Type Type { get; }
 
@@ -35,6 +35,8 @@ namespace BitButterCORE.V2
 		IBaseObject IObjectReference.Object => Object;
 
 		public bool IsValid => Type != null && ID > 0 && ObjectFactory.Instance.HasObjectWithReference(this);
+
+		public bool IsValidHandler => IsValid;
 
 		public static bool operator == (ObjectReference<TObject> ref1, ObjectReference<TObject> ref2)
 		{

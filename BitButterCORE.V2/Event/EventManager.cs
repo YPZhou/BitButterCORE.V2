@@ -4,6 +4,11 @@ using System.Reflection;
 
 namespace BitButterCORE.V2
 {
+	public interface IEventHandler
+	{
+		bool IsValidHandler { get; }
+	}
+
 	public class EventManager : BaseSingleton<EventManager>
 	{
 		public void RaiseEvent(string eventName, params object[] eventArgs)
@@ -16,9 +21,16 @@ namespace BitButterCORE.V2
 					var args = eventArgs.Length > 0 ? new object[] { eventArgs } : new object[] { null };
 					if (target is IObjectReference reference)
 					{
-						if (reference.IsValid)
+						if (reference.IsValidHandler)
 						{
 							handler.Item2.Invoke(reference.Object, args);
+						}
+					}
+					else if (target is IEventHandler eventHandler)
+					{
+						if (eventHandler.IsValidHandler)
+						{
+							handler.Item2.Invoke(target, args);
 						}
 					}
 					else
@@ -34,9 +46,9 @@ namespace BitButterCORE.V2
 		bool ShouldRemoveHandler(Tuple<object, MethodInfo> handlerTuple)
 		{
 			var result = false;
-			if (handlerTuple.Item1 is IObjectReference reference)
+			if (handlerTuple.Item1 is IEventHandler handler)
 			{
-				result = !reference.IsValid;
+				result = !handler.IsValidHandler;
 			}
 			return result;
 		}

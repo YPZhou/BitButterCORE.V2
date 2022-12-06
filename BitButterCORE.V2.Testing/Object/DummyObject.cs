@@ -108,4 +108,9 @@
 
 		public int UpdateCalledCount { get; private set; }
 	}
+
+	public class NonManagedObjectWithEventHandlerImplementingIEventHandler : NonManagedObjectWithEventHandler, IEventHandler
+	{
+		public bool IsValidHandler { get; set; }
+	}
 }

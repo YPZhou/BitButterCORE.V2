@@ -98,5 +98,22 @@ namespace BitButterCORE.V2.Testing
 
 			Assert.That(nonManagedObject.UpdateCalledCount, Is.EqualTo(1), "TestEvent handler should be invoked once for non-managed object");
 		}
+
+		[Test]
+		public void TestRaiseEventForNonManagedIEventHandler()
+		{
+			var nonManagedObjectImplementingIEventHandler = new NonManagedObjectWithEventHandlerImplementingIEventHandler();
+
+			var handlersProperty = typeof(EventManager).GetProperty("Handlers", BindingFlags.Instance | BindingFlags.NonPublic);
+			var handlers = handlersProperty.GetMethod.Invoke(EventManager.Instance, null) as Dictionary<string, List<Tuple<object, MethodInfo>>>;
+
+			Assert.That(handlers["TestEvent"].Count, Is.EqualTo(1), "Should contain 1 handler for TestEvent");
+			Assert.That(handlers["TestEvent"].Exists(tuple => (NonManagedObjectWithEventHandlerImplementingIEventHandler)tuple.Item1 == nonManagedObjectImplementingIEventHandler), Is.True, "Should contain handler targeting NonManagedObjectWithEventHandlerImplementingIEventHandler");
+
+			nonManagedObjectImplementingIEventHandler.IsValidHandler = false;
+			EventManager.Instance.RaiseEvent("TestEvent");
+
+			Assert.That(handlers["TestEvent"].Count, Is.EqualTo(0), "Should contain no handler for TestEvent");
+		}
 	}
 }
