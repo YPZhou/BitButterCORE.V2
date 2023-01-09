@@ -18,7 +18,7 @@ namespace BitButterCORE.V2
 		new TObject Object { get; }
 	}
 
-	public struct ObjectReference<TObject> : IObjectReference<TObject> where TObject : IBaseObject
+	public class ObjectReference<TObject> : IObjectReference<TObject> where TObject : IBaseObject
 	{
 		public ObjectReference(uint id)
 		{
@@ -30,11 +30,11 @@ namespace BitButterCORE.V2
 
 		public uint ID { get; }
 
-		public TObject Object => IsValid ? (TObject)ObjectFactory.Instance.GetObjectByReference(this) : default(TObject);
+		public TObject Object => IsValid ? (TObject)ObjectFactory.Instance.GetObjectByTypeAndID(Type, ID) : default;
 
 		IBaseObject IObjectReference.Object => Object;
 
-		public bool IsValid => Type != null && ID > 0 && ObjectFactory.Instance.HasObjectWithReference(this);
+		public bool IsValid => Type != null && ID > 0 && ObjectFactory.Instance.HasObjectWithTypeAndID(Type, ID);
 
 		public bool IsValidHandler => IsValid;
 

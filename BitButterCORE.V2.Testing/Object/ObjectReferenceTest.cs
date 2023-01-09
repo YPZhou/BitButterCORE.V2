@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace BitButterCORE.V2.Testing
 {
@@ -25,6 +26,17 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestTypeHeapAllocation()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+
+			var allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+			_ = objectReference.Type;
+
+			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Access Type should cause no heap allocation");
+		}
+
+		[Test]
 		public void TestID()
 		{
 			var dummyObjectReference1 = ObjectFactory.Instance.Create<DummyObject>();
@@ -38,6 +50,17 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestIDHeapAllocation()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+
+			var allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+			_ = objectReference.ID;
+
+			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Access ID should cause no heap allocation");
+		}
+
+		[Test]
 		public void TestObject()
 		{
 			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
@@ -45,6 +68,17 @@ namespace BitButterCORE.V2.Testing
 
 			ObjectFactory.Instance.RemoveAll<DummyObject>();
 			Assert.That(objectReference.Object, Is.Null, "Object should be null after removal");
+		}
+
+		[Test]
+		public void TestObjectHeapAllocation()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+
+			var allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+			_ = objectReference.Object;
+
+			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Access Object should cause no heap allocation");
 		}
 
 		[Test]
@@ -58,10 +92,14 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
-		public void TestDefaultObjectReferenceIsInvalid()
+		public void TestIsValidHeapAllocation()
 		{
-			var defaultReference = default(ObjectReference<IBaseObject>);
-			Assert.That(defaultReference.IsValid, Is.False, "Default reference is not valid");
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+
+			var allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+			_ = objectReference.IsValid;
+
+			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Access IsValid should cause no heap allocation");
 		}
 	}
 }

@@ -90,7 +90,7 @@ namespace BitButterCORE.V2
 
 		public void Remove(IObjectReference reference)
 		{
-			var objectToRemove = GetObjectByReference(reference);
+			var objectToRemove = GetObjectByTypeAndID(reference.Type, reference.ID);
 			if (objectToRemove != null)
 			{
 				var objectType = objectToRemove.GetType();
@@ -217,18 +217,16 @@ namespace BitButterCORE.V2
 		Dictionary<Type, List<IObjectReference>> RemovedObjects => removedObjects ?? (removedObjects = new Dictionary<Type, List<IObjectReference>>());
 		Dictionary<Type, List<IObjectReference>> removedObjects;
 
-		internal bool HasObjectWithReference(IObjectReference reference) => Factory.ContainsKey(reference.Type) && Factory[reference.Type].ContainsKey(reference.ID);
+		internal bool HasObjectWithTypeAndID(Type type, uint id) => Factory.TryGetValue(type, out var typeFactory) && typeFactory.TryGetValue(id, out _);
 
-		internal IBaseObject GetObjectByReference(IObjectReference reference) => GetObjectByTypeAndID(reference.Type, reference.ID);
-
-		IBaseObject GetObjectByTypeAndID(Type type, uint id)
+		internal IBaseObject GetObjectByTypeAndID(Type type, uint id)
 		{
-			var result = default(IBaseObject);
-			if (Factory.ContainsKey(type) && Factory[type].ContainsKey(id))
+			if (Factory.TryGetValue(type, out var typeFactory) && typeFactory.TryGetValue(id, out var result))
 			{
-				result = Factory[type][id];
+				return result;
 			}
-			return result;
+
+			return null;
 		}
 
 		public IEnumerable<IObjectReference<TObject>> Query<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject
@@ -236,9 +234,9 @@ namespace BitButterCORE.V2
 			var objectType = typeof(TObject);
 			var objectCollection = new List<TObject>();
 
-			if (Factory.ContainsKey(objectType))
+			if (Factory.TryGetValue(objectType, out var typeFactory))
 			{
-				objectCollection.AddRange(Factory[objectType].Values.OfType<TObject>());
+				objectCollection.AddRange(typeFactory.Values.OfType<TObject>());
 			}
 
 			foreach (var key in Factory.Keys)
