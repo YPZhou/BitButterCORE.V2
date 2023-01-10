@@ -144,3 +144,14 @@ EventManager.Instance.AddHandler("TestEventName", (_) =>
 ```
 
 另外，不仅在框架提供的BaseObject子类中可以注册事件Handler，在一般C#类中也可以注册事件Handler，即框架的事件模块可以单独使用。
+
+#### 性能
+
+访问ObjectReference的任何成员都不会分配堆内存。
+
+但目前访问ObjectFactory及EventManager的成员仍会产生堆内存垃圾，导致GC耗时增加。
+因此不建议在画面绘制及逻辑更新等频繁调用的代码中（例如GameObject.Update()）使用ObjectFactory进行数据查询，或使用EventManager抛出事件。
+
+推荐的做法是仅在游戏数据发生改变时抛出事件，通知绘制代码进行画面状态更新。
+
+后续计划进一步优化框架性能，减少ObjectFactory及EventManager的堆内存分配。
