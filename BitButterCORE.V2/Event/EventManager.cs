@@ -63,10 +63,9 @@ namespace BitButterCORE.V2
 			var target = handlerToAdd.Target is IBaseObject obj ? obj.Reference : handlerToAdd.Target;
 			var method = handlerToAdd.Method;
 			var handlerTuple = Tuple.Create(target, method);
-			if (!Handlers[eventName].Contains(handlerTuple))
-			{
-				Handlers[eventName].Add(handlerTuple);
-			}
+
+			Handlers[eventName].RemoveAll(tuple => tuple.Equals(handlerTuple));
+			Handlers[eventName].Add(handlerTuple);
 		}
 
 		Dictionary<string, List<Tuple<object, MethodInfo>>> Handlers => handlers ?? (handlers = new Dictionary<string, List<Tuple<object, MethodInfo>>>());

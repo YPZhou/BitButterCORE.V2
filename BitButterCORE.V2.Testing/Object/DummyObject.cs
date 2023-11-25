@@ -65,10 +65,10 @@
 		public DummyObjectWithEventHandler(uint id)
 			: base(id)
 		{
-			EventManager.Instance.AddHandler("TestEvent", (_) => Update());
+			EventManager.Instance.AddHandler("TestEvent", Update);
 		}
 
-		void Update()
+		public void Update(params object[] args)
 		{
 			UpdateCalledCount += 1;
 			TotalUpdateCalledCount += 1;

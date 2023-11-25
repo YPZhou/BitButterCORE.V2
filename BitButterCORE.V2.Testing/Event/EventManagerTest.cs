@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -28,8 +29,26 @@ namespace BitButterCORE.V2.Testing
 
 			Assert.That(handlers.ContainsKey("TestEvent"), Is.True, "Should contain handler for TestEvent");
 			Assert.That(handlers["TestEvent"].Count, Is.EqualTo(2), "Should contain 2 handlers for TestEvent");
-			Assert.That(handlers["TestEvent"].Exists(tuple => (IObjectReference<DummyObjectWithEventHandler>)tuple.Item1 == dummyObject1), Is.True, "Should contain handler targeting dummyObject1");
-			Assert.That(handlers["TestEvent"].Exists(tuple => (IObjectReference<DummyObjectWithEventHandler>)tuple.Item1 == dummyObject2), Is.True, "Should contain handler targeting dummyObject2");
+			Assert.That(handlers["TestEvent"].Count(tuple => (IObjectReference<DummyObjectWithEventHandler>)tuple.Item1 == dummyObject1), Is.EqualTo(1), "Should contain 1 handler targeting dummyObject1");
+			Assert.That(handlers["TestEvent"].Count(tuple => (IObjectReference<DummyObjectWithEventHandler>)tuple.Item1 == dummyObject2), Is.EqualTo(1), "Should contain 1 handler targeting dummyObject2");
+		}
+
+		[Test]
+		public void TestAddHandlerRemoveAllExistingHandlersWithSameTargetAndMethod()
+		{
+			var dummyObject = ObjectFactory.Instance.Create<DummyObjectWithEventHandler>();
+
+			var handlersProperty = typeof(EventManager).GetProperty("Handlers", BindingFlags.Instance | BindingFlags.NonPublic);
+			var handlers = handlersProperty.GetMethod.Invoke(EventManager.Instance, null) as Dictionary<string, List<Tuple<object, MethodInfo>>>;
+
+			handlers["TestEvent"].Add(handlers["TestEvent"][0]);
+			handlers["TestEvent"].Add(handlers["TestEvent"][0]);
+
+			Assert.That(handlers["TestEvent"].Count, Is.EqualTo(3), "pre-condition");
+
+			EventManager.Instance.AddHandler("TestEvent", dummyObject.Object.Update);
+
+			Assert.That(handlers["TestEvent"].Count, Is.EqualTo(1), "Should contain 1 handler for TestEvent");
 		}
 
 		[Test]
