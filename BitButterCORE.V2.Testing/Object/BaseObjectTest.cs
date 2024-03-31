@@ -62,5 +62,11 @@ namespace BitButterCORE.V2.Testing
 			var object3 = ObjectFactory.Instance.Create<DummyObject2>().Object;
 			Assert.That(object3.ToString(), Is.EqualTo("DummyObject21"));
 		}
+
+		[Test]
+		public void TestAccessObjectInOnObjectCreated()
+		{
+			Assert.DoesNotThrow(() => ObjectFactory.Instance.Create<DummyObjectAccessObjectPropertyByReferenceInOnObjectCreated>());
+		}
 	}
 }

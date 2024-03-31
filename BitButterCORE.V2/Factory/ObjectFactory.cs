@@ -31,6 +31,8 @@ namespace BitButterCORE.V2
 
 					var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 					AddObjectToFactory(obj);
+					obj.OnObjectCreated();
+
 					result = obj.Reference;
 					UpdateFactoryChangeRecordsForAddObject(result);
 				}

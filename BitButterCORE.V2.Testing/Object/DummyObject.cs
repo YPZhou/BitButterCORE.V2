@@ -94,6 +94,19 @@
 		}
 	}
 
+	public class DummyObjectAccessObjectPropertyByReferenceInOnObjectCreated : DummyObject
+	{
+		public DummyObjectAccessObjectPropertyByReferenceInOnObjectCreated(uint id)
+			: base(id)
+		{
+		}
+
+		protected override void OnObjectCreatedCore()
+		{
+			_ = Reference.Object.ID;
+		}
+	}
+
 	public class NonManagedObjectWithEventHandler
 	{
 		public NonManagedObjectWithEventHandler()

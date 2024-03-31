@@ -6,6 +6,7 @@ namespace BitButterCORE.V2
 	{
 		uint ID { get; }
 		IObjectReference Reference { get; }
+		void OnObjectCreated();
 	}
 
 	public abstract class BaseObject<TObject> : IBaseObject where TObject : IBaseObject
@@ -25,6 +26,15 @@ namespace BitButterCORE.V2
 		{
 			var referenceType = typeof(ObjectReference<>).MakeGenericType(GetType());
 			return (IObjectReference<TObject>)Activator.CreateInstance(referenceType, ID);
+		}
+
+		void IBaseObject.OnObjectCreated()
+		{
+			OnObjectCreatedCore();
+		}
+
+		protected virtual void OnObjectCreatedCore()
+		{
 		}
 
 		public uint ID { get; }
