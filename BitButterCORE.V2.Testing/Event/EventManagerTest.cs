@@ -109,13 +109,8 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestRaiseEventForNonManagedObject()
 		{
-			var nonManagedObject = new NonManagedObjectWithEventHandler();
-
-			Assert.That(nonManagedObject.UpdateCalledCount, Is.EqualTo(0), "pre-condition");
-
-			EventManager.Instance.RaiseEvent("TestEvent", 1, "abc");
-
-			Assert.That(nonManagedObject.UpdateCalledCount, Is.EqualTo(1), "TestEvent handler should be invoked once for non-managed object");
+			Assert.That(() => new NonManagedObjectWithEventHandler(),
+				Throws.InvalidOperationException.With.Message.EqualTo("Failed to register event handler for BitButterCORE.V2.Testing.NonManagedObjectWithEventHandler, please make sure it implements interface BitButterCORE.V2.IEventHandler."));
 		}
 
 		[Test]

@@ -111,15 +111,10 @@
 	{
 		public NonManagedObjectWithEventHandler()
 		{
-			EventManager.Instance.AddHandler("TestEvent", (_) => Update());
+			EventManager.Instance.AddHandler("TestEvent", (_) => OnEvent());
 		}
 
-		void Update()
-		{
-			UpdateCalledCount += 1;
-		}
-
-		public int UpdateCalledCount { get; private set; }
+		void OnEvent() { }
 	}
 
 	public class NonManagedObjectWithEventHandlerImplementingIEventHandler : NonManagedObjectWithEventHandler, IEventHandler

@@ -33,10 +33,6 @@ namespace BitButterCORE.V2
 							handler.Item2.Invoke(target, args);
 						}
 					}
-					else
-					{
-						handler.Item2.Invoke(target, args);
-					}
 				}
 
 				Handlers[eventName].RemoveAll(handlerTuple => ShouldRemoveHandler(handlerTuple));
@@ -45,27 +41,35 @@ namespace BitButterCORE.V2
 
 		bool ShouldRemoveHandler(Tuple<object, MethodInfo> handlerTuple)
 		{
-			var result = false;
+			var result = true;
 			if (handlerTuple.Item1 is IEventHandler handler)
 			{
 				result = !handler.IsValidHandler;
 			}
+
 			return result;
 		}
 
 		public void AddHandler(string eventName, EventHandler handlerToAdd)
 		{
-			if (!Handlers.ContainsKey(eventName))
+			if (handlerToAdd.Target is IBaseObject || handlerToAdd.Target is IEventHandler)
 			{
-				Handlers.Add(eventName, new List<Tuple<object, MethodInfo>>());
+				if (!Handlers.ContainsKey(eventName))
+				{
+					Handlers.Add(eventName, new List<Tuple<object, MethodInfo>>());
+				}
+
+				var target = handlerToAdd.Target is IBaseObject obj ? obj.Reference : handlerToAdd.Target;
+				var method = handlerToAdd.Method;
+				var handlerTuple = Tuple.Create(target, method);
+
+				Handlers[eventName].RemoveAll(tuple => tuple.Equals(handlerTuple));
+				Handlers[eventName].Add(handlerTuple);
 			}
-
-			var target = handlerToAdd.Target is IBaseObject obj ? obj.Reference : handlerToAdd.Target;
-			var method = handlerToAdd.Method;
-			var handlerTuple = Tuple.Create(target, method);
-
-			Handlers[eventName].RemoveAll(tuple => tuple.Equals(handlerTuple));
-			Handlers[eventName].Add(handlerTuple);
+			else
+			{
+				throw new InvalidOperationException(string.Format("Failed to register event handler for {0}, please make sure it implements interface {1}.", handlerToAdd.Target.GetType().FullName, typeof(IEventHandler).FullName));
+			}
 		}
 
 		Dictionary<string, List<Tuple<object, MethodInfo>>> Handlers => handlers ?? (handlers = new Dictionary<string, List<Tuple<object, MethodInfo>>>());
