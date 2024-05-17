@@ -145,6 +145,8 @@ EventManager.Instance.AddHandler("TestEventName", (_) =>
 
 另外，不仅在框架提供的BaseObject子类中可以注册事件Handler，在一般C#类中也可以注册事件Handler，即框架的事件模块可以单独使用。
 
+不过需要注意的是，如果要在一般C#类中注册事件Handler，该类必须实现IEventHandler接口。
+
 #### 性能
 
 访问ObjectReference的任何成员都不会分配堆内存。
