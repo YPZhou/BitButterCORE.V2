@@ -1,0 +1,16 @@
+[
+  {
+    "DummyObject1": {
+      "StringProperty": "TestString1",
+      "NumberProperty": 123,
+      "BoolProperty": true
+    }
+  },
+  {
+    "DummyObject2": {
+      "StringProperty": "TestString2",
+      "NumberProperty": 321,
+      "BoolProperty": false
+    }
+  }
+]

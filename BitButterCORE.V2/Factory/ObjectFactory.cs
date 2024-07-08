@@ -90,6 +90,22 @@ namespace BitButterCORE.V2
 			});
 		}
 
+		public IObjectReference<TObject> CreateFromTemplate<TObject>(string objectTemplateName, params object[] args) where TObject : IBaseObject
+		{
+			var result = Create<TObject>(args);
+			if (result != null && result.IsValid)
+			{
+				var template = ObjectTemplateManager.Instance[objectTemplateName];
+				foreach (var property in template)
+				{
+					var propertyInfo = typeof(TObject).GetProperty(property.Key, BindingFlags.Public | BindingFlags.Instance);
+					propertyInfo?.SetValue(result.Object, property.Value);
+				}
+			}
+
+			return result;
+		}
+
 		public void Remove(IObjectReference reference)
 		{
 			var objectToRemove = GetObjectByTypeAndID(reference.Type, reference.ID);

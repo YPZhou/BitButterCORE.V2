@@ -17,4 +17,22 @@
     <ProjectReference Include="..\BitButterCORE.V2\BitButterCORE.V2.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Object\TestJsonFiles\DummyObjectTemplate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Object\TestJsonFiles\NotArray.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Object\TestJsonFiles\NotArrayOfObjects.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Object\TestJsonFiles\TemplateDataNotObject.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Object\TestJsonFiles\TemplateValueNotSupported.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

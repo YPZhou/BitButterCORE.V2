@@ -107,6 +107,18 @@
 		}
 	}
 
+	public class DummyObjectWithPropertySetter : DummyObject
+	{
+		public DummyObjectWithPropertySetter(uint id)
+			: base(id)
+		{
+		}
+
+		public string StringProperty { get; private set; }
+		public float NumberProperty { get; private set; }
+		public bool BoolProperty { get; private set; }
+	}
+
 	public class NonManagedObjectWithEventHandler
 	{
 		public NonManagedObjectWithEventHandler()
