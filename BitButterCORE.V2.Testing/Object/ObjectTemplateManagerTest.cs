@@ -19,15 +19,17 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(objectTemplates, Contains.Key("DummyObject2"), "Should contain object template with name DummyObject2");
 
 			var template1 = objectTemplates["DummyObject1"];
-			Assert.That(template1.Count, Is.EqualTo(3), "Should contain 3 properties");
+			Assert.That(template1.Count, Is.EqualTo(4), "Should contain 3 properties");
 			Assert.That(template1["StringProperty"], Is.EqualTo("TestString1"), "String property");
-			Assert.That(template1["NumberProperty"], Is.EqualTo(123), "Number property");
+			Assert.That(template1["IntProperty"], Is.EqualTo(123), "Int property");
+			Assert.That(template1["FloatProperty"], Is.EqualTo(1.23f), "Float property");
 			Assert.That(template1["BoolProperty"], Is.EqualTo(true), "Bool property");
 
 			var template2 = objectTemplates["DummyObject2"];
-			Assert.That(template2.Count, Is.EqualTo(3), "Should contain 3 properties");
+			Assert.That(template2.Count, Is.EqualTo(4), "Should contain 3 properties");
 			Assert.That(template2["StringProperty"], Is.EqualTo("TestString2"), "String property");
-			Assert.That(template2["NumberProperty"], Is.EqualTo(321), "Number property");
+			Assert.That(template2["IntProperty"], Is.EqualTo(321), "Int property");
+			Assert.That(template2["FloatProperty"], Is.EqualTo(3.21f), "Float property");
 			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
 		}
 
@@ -64,8 +66,8 @@ namespace BitButterCORE.V2.Testing
 				Throws.InvalidOperationException.With.Message.EqualTo("Getting object template failed as key NonExistingObject does not exist."),
 				"Should throw exception when object template name does not exist");
 
-			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Count, Is.EqualTo(3), "Should contain 3 properties");
-			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Count, Is.EqualTo(3), "Should contain 3 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Count, Is.EqualTo(4), "Should contain 4 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Count, Is.EqualTo(4), "Should contain 4 properties");
 		}
 	}
 }

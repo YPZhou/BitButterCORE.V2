@@ -117,7 +117,8 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		public string StringProperty { get; private set; }
-		public float NumberProperty { get; private set; }
+		public int IntProperty { get; private set; }
+		public float FloatProperty { get; private set; }
 		public bool BoolProperty { get; private set; }
 
 		public string AdditionalProperty { get; private set; }

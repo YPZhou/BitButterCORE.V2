@@ -88,14 +88,16 @@ namespace BitButterCORE.V2.Testing
 			var objectReference1 = ObjectFactory.Instance.CreateFromTemplate<DummyObjectWithPropertySetter>("DummyObject1");
 			Assert.That(objectReference1, Is.Not.Null, "Object created");
 			Assert.That(objectReference1.Object.StringProperty, Is.EqualTo("TestString1"), "String property set");
-			Assert.That(objectReference1.Object.NumberProperty, Is.EqualTo(123), "Number property set");
+			Assert.That(objectReference1.Object.IntProperty, Is.EqualTo(123), "Int property set");
+			Assert.That(objectReference1.Object.FloatProperty, Is.EqualTo(1.23f), "Float property set");
 			Assert.That(objectReference1.Object.BoolProperty, Is.EqualTo(true), "Bool property set");
 			Assert.That(objectReference1.Object.AdditionalProperty, Is.EqualTo("DummyObject1"), "Additional property set");
 
 			var objectReference2 = ObjectFactory.Instance.CreateFromTemplate<DummyObjectWithPropertySetter>("DummyObject2");
 			Assert.That(objectReference2, Is.Not.Null, "Object created");
 			Assert.That(objectReference2.Object.StringProperty, Is.EqualTo("TestString2"), "String property set");
-			Assert.That(objectReference2.Object.NumberProperty, Is.EqualTo(321), "Number property set");
+			Assert.That(objectReference2.Object.IntProperty, Is.EqualTo(321), "Int property set");
+			Assert.That(objectReference2.Object.FloatProperty, Is.EqualTo(3.21f), "Float property set");
 			Assert.That(objectReference2.Object.BoolProperty, Is.EqualTo(false), "Bool property set");
 			Assert.That(objectReference2.Object.AdditionalProperty, Is.EqualTo("DummyObject2"), "Additional property set");
 		}

@@ -80,7 +80,15 @@ namespace BitButterCORE.V2
 					}
 					else if (propertyType == JsonValueKind.Number)
 					{
-						template.Add(property.Key, (float)propertyValue);
+						if (int.TryParse(propertyValue.ToString(), out var intValue))
+						{
+							template.Add(property.Key, intValue);
+						}
+						else
+						{
+							template.Add(property.Key, (float)propertyValue);
+						}
+
 						propertyParsed = true;
 					}
 					else if (propertyType == JsonValueKind.True)
