@@ -1,4 +1,6 @@
-﻿namespace BitButterCORE.V2.Testing
+﻿using System.Collections.Generic;
+
+namespace BitButterCORE.V2.Testing
 {
 	public class DummyObject : BaseObject<DummyObject>
 	{
@@ -107,7 +109,7 @@
 		}
 	}
 
-	public class DummyObjectWithPropertySetter : DummyObject
+	public class DummyObjectWithPropertySetter : DummyObject, ITemplateObject
 	{
 		public DummyObjectWithPropertySetter(uint id)
 			: base(id)
@@ -117,6 +119,13 @@
 		public string StringProperty { get; private set; }
 		public float NumberProperty { get; private set; }
 		public bool BoolProperty { get; private set; }
+
+		public string AdditionalProperty { get; private set; }
+
+		void ITemplateObject.SetupObjectFromTemplate(string templateName, Dictionary<string, object> _)
+		{
+			AdditionalProperty = templateName;
+		}
 	}
 
 	public class NonManagedObjectWithEventHandler

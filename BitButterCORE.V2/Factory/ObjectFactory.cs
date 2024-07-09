@@ -90,17 +90,19 @@ namespace BitButterCORE.V2
 			});
 		}
 
-		public IObjectReference<TObject> CreateFromTemplate<TObject>(string objectTemplateName, params object[] args) where TObject : IBaseObject
+		public IObjectReference<TObject> CreateFromTemplate<TObject>(string templateName, params object[] args) where TObject : ITemplateObject
 		{
 			var result = Create<TObject>(args);
 			if (result != null && result.IsValid)
 			{
-				var template = ObjectTemplateManager.Instance[objectTemplateName];
+				var template = ObjectTemplateManager.Instance[templateName];
 				foreach (var property in template)
 				{
 					var propertyInfo = typeof(TObject).GetProperty(property.Key, BindingFlags.Public | BindingFlags.Instance);
 					propertyInfo?.SetValue(result.Object, property.Value);
 				}
+
+				result.Object.SetupObjectFromTemplate(templateName, template);
 			}
 
 			return result;

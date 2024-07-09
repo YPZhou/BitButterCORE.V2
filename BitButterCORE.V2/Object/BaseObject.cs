@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BitButterCORE.V2
 {
@@ -7,6 +8,11 @@ namespace BitButterCORE.V2
 		uint ID { get; }
 		IObjectReference Reference { get; }
 		void OnObjectCreated();
+	}
+
+	public interface ITemplateObject : IBaseObject
+	{
+		void SetupObjectFromTemplate(string templateName, Dictionary<string, object> template);
 	}
 
 	public abstract class BaseObject<TObject> : IBaseObject where TObject : IBaseObject
