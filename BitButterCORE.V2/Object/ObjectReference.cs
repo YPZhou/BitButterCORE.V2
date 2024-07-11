@@ -68,5 +68,10 @@ namespace BitButterCORE.V2
 		{
 			return Type.GetHashCode() ^ ID.GetHashCode();
 		}
+
+		public override string ToString()
+		{
+			return IsValid ? Object.ToString() : $"Invalid reference to {Type.FullName}";
+		}
 	}
 }

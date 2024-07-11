@@ -101,5 +101,15 @@ namespace BitButterCORE.V2.Testing
 
 			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Access IsValid should cause no heap allocation");
 		}
+
+		[Test]
+		public void TestToString()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(objectReference.ToString(), Is.EqualTo("DummyObject1"));
+
+			ObjectFactory.Instance.Remove(objectReference);
+			Assert.That(objectReference.ToString(), Is.EqualTo("Invalid reference to BitButterCORE.V2.Testing.DummyObject"));
+		}
 	}
 }
