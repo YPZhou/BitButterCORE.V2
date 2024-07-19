@@ -1,0 +1,9 @@
+[
+  {
+    "DummyObject1": {
+      "ArrayPropertyWithNonSupportedValue": [
+        {}
+      ]
+    }
+  }
+]

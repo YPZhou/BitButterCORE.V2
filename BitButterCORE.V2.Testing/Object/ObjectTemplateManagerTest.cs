@@ -19,18 +19,20 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(objectTemplates, Contains.Key("DummyObject2"), "Should contain object template with name DummyObject2");
 
 			var template1 = objectTemplates["DummyObject1"];
-			Assert.That(template1.Count, Is.EqualTo(4), "Should contain 3 properties");
+			Assert.That(template1.Count, Is.EqualTo(5), "Should contain 5 properties");
 			Assert.That(template1["StringProperty"], Is.EqualTo("TestString1"), "String property");
 			Assert.That(template1["IntProperty"], Is.EqualTo(123), "Int property");
 			Assert.That(template1["FloatProperty"], Is.EqualTo(1.23f), "Float property");
 			Assert.That(template1["BoolProperty"], Is.EqualTo(true), "Bool property");
+			Assert.That(template1["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
 
 			var template2 = objectTemplates["DummyObject2"];
-			Assert.That(template2.Count, Is.EqualTo(4), "Should contain 3 properties");
+			Assert.That(template2.Count, Is.EqualTo(5), "Should contain 5 properties");
 			Assert.That(template2["StringProperty"], Is.EqualTo("TestString2"), "String property");
 			Assert.That(template2["IntProperty"], Is.EqualTo(321), "Int property");
 			Assert.That(template2["FloatProperty"], Is.EqualTo(3.21f), "Float property");
 			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
+			Assert.That(template2["ListProperty"], Is.EquivalentTo(new object[] { "456", 456, 4.56f, false }), "List property");
 		}
 
 		[Test]
@@ -55,6 +57,26 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(() => ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/TemplateValueNotSupported.json"),
 				Throws.InvalidOperationException.With.Message.EqualTo("Loading object template failed as {} is not a supported value type."),
 				"Should throw exception when object template file is of wrong format");
+
+			Assert.That(() => ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/TemplateArrayValueNotSupported.json"),
+				Throws.InvalidOperationException.With.Message.EqualTo("Loading object template failed as {} is not a supported value type for array."),
+				"Should throw exception when object template file is of wrong format");
+		}
+
+		[Test]
+		public void TestSetupObjectFromTemplate()
+		{
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/DummyObjectTemplate.json");
+
+			var templateObject = new NonManagedObjectWithPropertySetter();
+			ObjectTemplateManager.Instance.SetupObjectFromTemplate(templateObject, "DummyObject1");
+
+			Assert.That(templateObject.StringProperty, Is.EqualTo("TestString1"), "String property set");
+			Assert.That(templateObject.IntProperty, Is.EqualTo(123), "Int property set");
+			Assert.That(templateObject.FloatProperty, Is.EqualTo(1.23f), "Float property set");
+			Assert.That(templateObject.BoolProperty, Is.EqualTo(true), "Bool property set");
+			Assert.That(templateObject.ListProperty, Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }));
+			Assert.That(templateObject.AdditionalProperty, Is.EqualTo("DummyObject1"), "Additional property set");
 		}
 
 		[Test]
@@ -66,8 +88,8 @@ namespace BitButterCORE.V2.Testing
 				Throws.InvalidOperationException.With.Message.EqualTo("Getting object template failed as key NonExistingObject does not exist."),
 				"Should throw exception when object template name does not exist");
 
-			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Count, Is.EqualTo(4), "Should contain 4 properties");
-			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Count, Is.EqualTo(4), "Should contain 4 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Count, Is.EqualTo(5), "Should contain 4 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Count, Is.EqualTo(5), "Should contain 4 properties");
 		}
 	}
 }

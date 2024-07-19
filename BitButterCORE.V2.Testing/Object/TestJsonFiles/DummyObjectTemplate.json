@@ -4,7 +4,13 @@
       "StringProperty": "TestString1",
       "IntProperty": 123,
       "FloatProperty": 1.23,
-      "BoolProperty": true
+      "BoolProperty": true,
+      "ListProperty": [
+        "123",
+        123,
+        1.23,
+        true
+      ]
     }
   },
   {
@@ -12,7 +18,13 @@
       "StringProperty": "TestString2",
       "IntProperty": 321,
       "FloatProperty": 3.21,
-      "BoolProperty": false
+      "BoolProperty": false,
+      "ListProperty": [
+        "456",
+        456,
+        4.56,
+        false
+      ]
     }
   }
 ]

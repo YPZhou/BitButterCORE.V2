@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -72,33 +74,15 @@ namespace BitButterCORE.V2
 				var propertyValue = property.Value;
 				if (propertyValue != null)
 				{
-					var propertyType = propertyValue.GetValueKind();
-					if (propertyType == JsonValueKind.String)
+					if (TryGetValueFromJsonNode(propertyValue, out var value))
 					{
-						template.Add(property.Key, (string)propertyValue);
 						propertyParsed = true;
+						template.Add(property.Key, value);
 					}
-					else if (propertyType == JsonValueKind.Number)
+					
+					if (!propertyParsed && propertyValue.GetValueKind() == JsonValueKind.Array)
 					{
-						if (int.TryParse(propertyValue.ToString(), out var intValue))
-						{
-							template.Add(property.Key, intValue);
-						}
-						else
-						{
-							template.Add(property.Key, (float)propertyValue);
-						}
-
-						propertyParsed = true;
-					}
-					else if (propertyType == JsonValueKind.True)
-					{
-						template.Add(property.Key, true);
-						propertyParsed = true;
-					}
-					else if (propertyType == JsonValueKind.False)
-					{
-						template.Add(property.Key, false);
+						template.Add(property.Key, GetValueListFromJsonArray(propertyValue.AsArray()));
 						propertyParsed = true;
 					}
 				}
@@ -108,6 +92,86 @@ namespace BitButterCORE.V2
 					throw new InvalidOperationException(string.Format("Loading object template failed as {0} is not a supported value type.", propertyValue));
 				}
 			}
+		}
+
+		bool TryGetValueFromJsonNode(JsonNode node, out object value)
+		{
+			var success = false;
+			value = null;
+			if (node.GetValueKind() == JsonValueKind.String)
+			{
+				value = (string)node;
+				success = true;
+			}
+			else if (node.GetValueKind() == JsonValueKind.Number)
+			{
+				if (int.TryParse(node.ToString(), out var intValue))
+				{
+					value = intValue;
+				}
+				else
+				{
+					value = (float)node;
+				}
+
+				success = true;
+			}
+			else if (node.GetValueKind() == JsonValueKind.True)
+			{
+				value = true;
+				success = true;
+			}
+			else if (node.GetValueKind() == JsonValueKind.False)
+			{
+				value = false;
+				success = true;
+			}
+
+			return success;
+		}
+
+		List<object> GetValueListFromJsonArray(JsonArray jsonArray)
+		{
+			var result = new List<object>();
+			foreach (var node in jsonArray)
+			{
+				if (TryGetValueFromJsonNode(node, out var value))
+				{
+					result.Add(value);
+				}
+				else
+				{
+					throw new InvalidOperationException(string.Format("Loading object template failed as {0} is not a supported value type for array.", node));
+				}
+			}
+
+			return result;
+		}
+
+		public void SetupObjectFromTemplate(ITemplateObject templateObject, string templateName)
+		{
+			var template = this[templateName];
+			foreach (var templateProperty in template)
+			{
+				var objectPropertyInfo = templateObject.GetType().GetProperty(templateProperty.Key, BindingFlags.Public | BindingFlags.Instance);
+				if (templateProperty.Value is IList templateList)
+				{
+					var objectList = objectPropertyInfo?.GetValue(templateObject) as IList;
+					if (objectList != null)
+					{
+						foreach (var value in templateList)
+						{
+							objectList.Add(value);
+						}
+					}
+				}
+				else
+				{
+					objectPropertyInfo?.SetValue(templateObject, templateProperty.Value);
+				}
+			}
+
+			templateObject.SetupObjectFromTemplate(templateName, template);
 		}
 
 		public Dictionary<string, object> this[string key]

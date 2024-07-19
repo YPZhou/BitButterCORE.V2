@@ -120,6 +120,8 @@ namespace BitButterCORE.V2.Testing
 		public int IntProperty { get; private set; }
 		public float FloatProperty { get; private set; }
 		public bool BoolProperty { get; private set; }
+		public List<object> ListProperty => listProperty ??= new List<object>();
+		List<object> listProperty;
 
 		public string AdditionalProperty { get; private set; }
 
@@ -142,5 +144,22 @@ namespace BitButterCORE.V2.Testing
 	public class NonManagedObjectWithEventHandlerImplementingIEventHandler : NonManagedObjectWithEventHandler, IEventHandler
 	{
 		public bool IsValidHandler { get; set; }
+	}
+
+	public class NonManagedObjectWithPropertySetter : ITemplateObject
+	{
+		public string StringProperty { get; private set; }
+		public int IntProperty { get; private set; }
+		public float FloatProperty { get; private set; }
+		public bool BoolProperty { get; private set; }
+		public List<object> ListProperty => listProperty ??= new List<object>();
+		List<object> listProperty;
+
+		public string AdditionalProperty { get; private set; }
+
+		void ITemplateObject.SetupObjectFromTemplate(string templateName, Dictionary<string, object> _)
+		{
+			AdditionalProperty = templateName;
+		}
 	}
 }
