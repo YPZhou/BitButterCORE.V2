@@ -6,6 +6,12 @@ namespace BitButterCORE.V2.Testing
 {
 	public class ObjectTemplateManagerTest
 	{
+		[SetUp]
+		public void Setup()
+		{
+			ObjectTemplateManager.Instance.RemoveAll();
+		}
+
 		[Test]
 		public void TestLoadObjectTemplate()
 		{
@@ -14,12 +20,10 @@ namespace BitButterCORE.V2.Testing
 			var templateProperty = typeof(ObjectTemplateManager).GetProperty("ObjectTemplates", BindingFlags.NonPublic | BindingFlags.Instance);
 			var objectTemplates = templateProperty.GetValue(ObjectTemplateManager.Instance) as Dictionary<string, Dictionary<string, object>>;
 
-			Assert.That(objectTemplates.Count, Is.EqualTo(2), "Should load 2 object templates");
-			Assert.That(objectTemplates, Contains.Key("DummyObject1"), "Should contain object template with name DummyObject1");
-			Assert.That(objectTemplates, Contains.Key("DummyObject2"), "Should contain object template with name DummyObject2");
+			Assert.That(objectTemplates.Keys, Is.EquivalentTo(new[] { "DummyObject1", "DummyObject2" }), "Should contain object template with name DummyObject1 and DummyObject2");
 
 			var template1 = objectTemplates["DummyObject1"];
-			Assert.That(template1.Count, Is.EqualTo(5), "Should contain 5 properties");
+			Assert.That(template1.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
 			Assert.That(template1["StringProperty"], Is.EqualTo("TestString1"), "String property");
 			Assert.That(template1["IntProperty"], Is.EqualTo(123), "Int property");
 			Assert.That(template1["FloatProperty"], Is.EqualTo(1.23f), "Float property");
@@ -27,12 +31,60 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(template1["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
 
 			var template2 = objectTemplates["DummyObject2"];
-			Assert.That(template2.Count, Is.EqualTo(5), "Should contain 5 properties");
+			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
 			Assert.That(template2["StringProperty"], Is.EqualTo("TestString2"), "String property");
 			Assert.That(template2["IntProperty"], Is.EqualTo(321), "Int property");
 			Assert.That(template2["FloatProperty"], Is.EqualTo(3.21f), "Float property");
 			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
 			Assert.That(template2["ListProperty"], Is.EquivalentTo(new object[] { "456", 456, 4.56f, false }), "List property");
+		}
+
+		[Test]
+		public void TestLoadObjectTemplateWithoutAppendOption()
+		{
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/DummyObjectTemplate.json");
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/AdditionalObjectTemplate.json", appendTemplate: false);
+
+			var templateProperty = typeof(ObjectTemplateManager).GetProperty("ObjectTemplates", BindingFlags.NonPublic | BindingFlags.Instance);
+			var objectTemplates = templateProperty.GetValue(ObjectTemplateManager.Instance) as Dictionary<string, Dictionary<string, object>>;
+
+			Assert.That(objectTemplates.Keys, Is.EquivalentTo(new[] { "DummyObject2", "DummyObject3" }), "Should contain object template with name DummyObject2 and DummyObject3");
+		}
+
+		[Test]
+		public void TestAppendObjectTemplate()
+		{
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/DummyObjectTemplate.json");
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/AdditionalObjectTemplate.json");
+
+			var templateProperty = typeof(ObjectTemplateManager).GetProperty("ObjectTemplates", BindingFlags.NonPublic | BindingFlags.Instance);
+			var objectTemplates = templateProperty.GetValue(ObjectTemplateManager.Instance) as Dictionary<string, Dictionary<string, object>>;
+
+			Assert.That(objectTemplates.Keys, Is.EquivalentTo(new[] { "DummyObject1", "DummyObject2", "DummyObject3" }), "Should contain object template with name DummyObject1, DummyObject2, and DummyObject3");
+
+			var template1 = objectTemplates["DummyObject1"];
+			Assert.That(template1.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(template1["StringProperty"], Is.EqualTo("TestString1"), "String property");
+			Assert.That(template1["IntProperty"], Is.EqualTo(123), "Int property");
+			Assert.That(template1["FloatProperty"], Is.EqualTo(1.23f), "Float property");
+			Assert.That(template1["BoolProperty"], Is.EqualTo(true), "Bool property");
+			Assert.That(template1["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
+
+			var template2 = objectTemplates["DummyObject2"];
+			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(template2["StringProperty"], Is.EqualTo("TestString3"), "String property");
+			Assert.That(template2["IntProperty"], Is.EqualTo(456), "Int property");
+			Assert.That(template2["FloatProperty"], Is.EqualTo(4.56f), "Float property");
+			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
+			Assert.That(template2["ListProperty"], Is.EquivalentTo(new object[] { "789", 789, 7.89f, true }), "List property");
+
+			var template3 = objectTemplates["DummyObject3"];
+			Assert.That(template3.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(template3["StringProperty"], Is.EqualTo("TestString1"), "String property");
+			Assert.That(template3["IntProperty"], Is.EqualTo(123), "Int property");
+			Assert.That(template3["FloatProperty"], Is.EqualTo(1.23f), "Float property");
+			Assert.That(template3["BoolProperty"], Is.EqualTo(true), "Bool property");
+			Assert.That(template3["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
 		}
 
 		[Test]
@@ -80,6 +132,19 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestRemoveAll()
+		{
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/DummyObjectTemplate.json");
+			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/AdditionalObjectTemplate.json");
+			ObjectTemplateManager.Instance.RemoveAll();
+
+			var templateProperty = typeof(ObjectTemplateManager).GetProperty("ObjectTemplates", BindingFlags.NonPublic | BindingFlags.Instance);
+			var objectTemplates = templateProperty.GetValue(ObjectTemplateManager.Instance) as Dictionary<string, Dictionary<string, object>>;
+
+			Assert.That(objectTemplates.Keys, Is.EquivalentTo(new string[] { }), "Should contain no object template");
+		}
+
+		[Test]
 		public void TestIndexer()
 		{
 			ObjectTemplateManager.Instance.LoadObjectTemplate("Object/TestJsonFiles/DummyObjectTemplate.json");
@@ -88,8 +153,8 @@ namespace BitButterCORE.V2.Testing
 				Throws.InvalidOperationException.With.Message.EqualTo("Getting object template failed as key NonExistingObject does not exist."),
 				"Should throw exception when object template name does not exist");
 
-			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Count, Is.EqualTo(5), "Should contain 4 properties");
-			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Count, Is.EqualTo(5), "Should contain 4 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
 		}
 	}
 }

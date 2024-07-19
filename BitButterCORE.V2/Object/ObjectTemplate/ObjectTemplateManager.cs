@@ -11,12 +11,12 @@ namespace BitButterCORE.V2
 {
 	public class ObjectTemplateManager : BaseSingleton<ObjectTemplateManager>
 	{
-		public void LoadObjectTemplate(string fileName)
+		public void LoadObjectTemplate(string fileName, bool appendTemplate = true)
 		{
 			if (File.Exists(fileName))
 			{
 				var jsonString = File.ReadAllText(fileName);
-				LoadObjectTemplateFromJsonFile(jsonString);
+				LoadObjectTemplateFromJsonFile(jsonString, appendTemplate);
 			}
 			else
 			{
@@ -24,12 +24,16 @@ namespace BitButterCORE.V2
 			}
 		}
 
-		void LoadObjectTemplateFromJsonFile(string jsonString)
+		void LoadObjectTemplateFromJsonFile(string jsonString, bool appendTemplate)
 		{
 			var rootNode = JsonNode.Parse(jsonString);
 			if (rootNode.GetValueKind() == JsonValueKind.Array)
 			{
-				ObjectTemplates.Clear();
+				if (!appendTemplate)
+				{
+					ObjectTemplates.Clear();
+				}
+
 				ParseJsonArrayAsObjectTemplates(rootNode.AsArray());
 			}
 			else
@@ -76,13 +80,13 @@ namespace BitButterCORE.V2
 				{
 					if (TryGetValueFromJsonNode(propertyValue, out var value))
 					{
+						template[property.Key] = value;
 						propertyParsed = true;
-						template.Add(property.Key, value);
 					}
 					
 					if (!propertyParsed && propertyValue.GetValueKind() == JsonValueKind.Array)
 					{
-						template.Add(property.Key, GetValueListFromJsonArray(propertyValue.AsArray()));
+						template[property.Key] = GetValueListFromJsonArray(propertyValue.AsArray());
 						propertyParsed = true;
 					}
 				}
@@ -172,6 +176,11 @@ namespace BitButterCORE.V2
 			}
 
 			templateObject.SetupObjectFromTemplate(templateName, template);
+		}
+
+		public void RemoveAll()
+		{
+			ObjectTemplates.Clear();
 		}
 
 		public Dictionary<string, object> this[string key]

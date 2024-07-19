@@ -1,0 +1,30 @@
+[
+  {
+    "DummyObject3": {
+      "StringProperty": "TestString1",
+      "IntProperty": 123,
+      "FloatProperty": 1.23,
+      "BoolProperty": true,
+      "ListProperty": [
+        "123",
+        123,
+        1.23,
+        true
+      ]
+    }
+  },
+  {
+    "DummyObject2": {
+      "StringProperty": "TestString3",
+      "IntProperty": 456,
+      "FloatProperty": 4.56,
+      "BoolProperty": false,
+      "ListProperty": [
+        "789",
+        789,
+        7.89,
+        true
+      ]
+    }
+  }
+]

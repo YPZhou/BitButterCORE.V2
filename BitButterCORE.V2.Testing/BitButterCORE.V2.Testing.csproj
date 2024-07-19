@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Object\TestJsonFiles\AdditionalObjectTemplate.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Object\TestJsonFiles\DummyObjectTemplate.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
