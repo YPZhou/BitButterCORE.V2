@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace BitButterCORE.V2.Testing
@@ -30,13 +31,29 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestCreateWithIncrementalID()
 		{
+			var methodInfo = typeof(ObjectFactory).GetMethod("GetObjectIDFountain", BindingFlags.Instance | BindingFlags.NonPublic);
+			var idFountain = methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject) }) as ObjectIDFountain;
+			_ = idFountain.NextID;
+			_ = idFountain.NextID;
+
 			var objectReference1 = ObjectFactory.Instance.Create<DummyObject>();
-			Assert.That(objectReference1.ID, Is.EqualTo(1), "pre-condition");
+			Assert.That(objectReference1.ID, Is.EqualTo(3), "pre-condition");
 
 			ObjectFactory.Instance.Remove(objectReference1);
 
 			var objectReference2 = ObjectFactory.Instance.Create<DummyObject>();
-			Assert.That(objectReference2.ID, Is.EqualTo(2), "Object ID should be incremental");
+			Assert.That(objectReference2.ID, Is.EqualTo(4), "Object ID should be incremental");
+		}
+
+		[Test]
+		public void TestCreateWithDuplicateIDThrowsException()
+		{
+			ObjectFactory.Instance.Create<DummyObject>();
+
+			var methodInfo = typeof(ObjectFactory).GetMethod("Create", BindingFlags.Instance | BindingFlags.NonPublic);
+			Assert.That(() => methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject), 1u, null }),
+				Throws.TargetInvocationException.With.InnerException.With.Message.EqualTo("Instantiation of BitButterCORE.V2.Testing.DummyObject failed because of duplicate ID 1"),
+				"Should throw exception when create object with duplicate ID");
 		}
 
 		[Test]
@@ -102,6 +119,25 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(objectReference2.Object.BoolProperty, Is.EqualTo(false), "Bool property set");
 			Assert.That(objectReference2.Object.ListProperty, Is.EquivalentTo(new object[] { "456", 456, 4.56f, false }));
 			Assert.That(objectReference2.Object.AdditionalProperty, Is.EqualTo("DummyObject2"), "Additional property set");
+		}
+
+		[Test]
+		public void TestSerializeObjects()
+		{
+			ObjectFactory.Instance.Create<DummyObject>();
+			var jsonString = ObjectFactory.Instance.SerializeObjects();
+
+			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"Value\":1}]}]"));
+		}
+
+		[Test]
+		public void TestDeserializeObjects()
+		{
+			var jsonString = "[{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"Value\":1}]}]";
+			ObjectFactory.Instance.DeserializeObjects(jsonString);
+
+			var objectReference = ObjectFactory.Instance.QueryFirst<DummyObject>();
+			Assert.That(objectReference.ID, Is.EqualTo(1));
 		}
 
 		[Test]

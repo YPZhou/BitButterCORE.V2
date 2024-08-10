@@ -14,10 +14,21 @@ namespace BitButterCORE.V2
 
 		public IObjectReference Create(Type objectType, params object[] args)
 		{
+			var newID = GetObjectIDFountain(objectType).NextID;
+			return Create(objectType, newID, args);
+		}
+
+		IObjectReference Create(Type objectType, uint newID, params object[] args)
+		{
 			var result = default(IObjectReference);
 			if (!objectType.IsAbstract)
 			{
-				var newID = GetObjectIDFountain(objectType).NextID;
+				if (Factory.TryGetValue(objectType, out var objectDictionary)
+					&& objectDictionary.TryGetValue(newID, out _))
+				{
+					throw new InvalidOperationException(string.Format("Instantiation of {0} failed because of duplicate ID {1}", objectType.FullName, newID));
+				}
+
 				var constructors = objectType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 				var matchingConstructors = FindMatchingConstructors(constructors, args);
 				if (matchingConstructors.Count() == 1)
