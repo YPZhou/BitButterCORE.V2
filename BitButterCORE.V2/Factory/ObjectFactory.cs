@@ -43,13 +43,13 @@ namespace BitButterCORE.V2
 					IDsInUse.Add(newID);
 					try
 					{
-					var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
-					AddObjectToFactory(obj);
-					obj.OnObjectCreated();
+						var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
+						AddObjectToFactory(obj);
+						obj.OnObjectCreated();
 
-					result = obj.Reference;
-					UpdateFactoryChangeRecordsForAddObject(result);
-				}
+						result = obj.Reference;
+						UpdateFactoryChangeRecordsForAddObject(result);
+					}
 					finally
 					{
 						IDsInUse.Remove(newID);
@@ -124,6 +124,15 @@ namespace BitButterCORE.V2
 		{
 			var serializer = new ObjectSerializer();
 			return serializer.SerializeObjects(Query<IBaseObject>());
+		}
+
+		public void DeserializeObjects(string jsonString)
+		{
+			RemoveAll();
+			ClearChanges();
+
+			var deserializer = new ObjectSerializer();
+			deserializer.DeserializeObjects(jsonString);
 		}
 
 		public void Remove(IObjectReference reference)

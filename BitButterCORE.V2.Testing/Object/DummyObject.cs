@@ -187,6 +187,6 @@ namespace BitButterCORE.V2.Testing
 		public bool BoolValue { get; }
 
 		[SerializeProperty]
-		public int IntValue2 { get; } = 100;
+		public int IntValue2 { get; set; }
 	}
 }

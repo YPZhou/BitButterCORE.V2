@@ -124,7 +124,9 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestSerializeObjects()
 		{
-			ObjectFactory.Instance.Create<SerializableObject>(2, 3.3f, "4", false);
+			var objectReference = ObjectFactory.Instance.Create<SerializableObject>(2, 3.3f, "4", false);
+			objectReference.Object.IntValue2 = 100;
+
 			var jsonString = ObjectFactory.Instance.SerializeObjects();
 
 			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":4},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":False},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]"));
@@ -133,11 +135,18 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestDeserializeObjects()
 		{
-			var jsonString = "[{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"Value\":1}]}]";
+			var jsonString = "[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":4},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":2}]}]";
 			ObjectFactory.Instance.DeserializeObjects(jsonString);
 
-			var objectReference = ObjectFactory.Instance.QueryFirst<DummyObject>();
-			Assert.That(objectReference.ID, Is.EqualTo(1));
+			var objectReference = ObjectFactory.Instance.QueryFirst<SerializableObject>();
+			Assert.That(objectReference, Is.Not.Null.With.Property("IsValid").EqualTo(true));
+			Assert.That(objectReference.Object, Is.Not.Null
+				.With.Property("ID").EqualTo(2)
+				.With.Property("IntValue").EqualTo(2)
+				.With.Property("FloatValue").EqualTo(3.3f)
+				.With.Property("StringValue").EqualTo("4")
+				.With.Property("BoolValue").EqualTo(false)
+				.With.Property("IntValue2").EqualTo(100));
 		}
 
 		[Test]

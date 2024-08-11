@@ -1,4 +1,6 @@
-﻿namespace BitButterCORE.V2
+﻿using System.Text.Json.Nodes;
+
+namespace BitButterCORE.V2
 {
 	internal abstract class SerializePropertyInfo
 	{
@@ -10,14 +12,31 @@
 			Value = value;
 		}
 
+		public SerializePropertyInfo(JsonObject propertyObject)
+		{
+			Name = propertyObject["Name"].ToString();
+			PropertyType = propertyObject["Type"].ToString();
+
+			if (!propertyObject.TryGetPropertyValue("ConstructorParameterOrder", out var ctorParameterOrderValue))
+			{
+				ctorParameterOrderValue = -1;
+			}
+
+			ConstructorParameterOrder = (int)ctorParameterOrderValue;
+
+			Value = PopulateValue(propertyObject["Value"]);
+		}
+
 		public string Name { get; }
 
 		public string PropertyType { get; }
 
 		public int ConstructorParameterOrder { get; }
 
-		public object Value { get; }
+		public object Value { get; private set; }
 
 		public abstract string PopulateJsonString();
+
+		protected abstract object PopulateValue(JsonNode valueNode);
 	}
 }
