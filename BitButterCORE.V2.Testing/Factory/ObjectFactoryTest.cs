@@ -124,10 +124,10 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestSerializeObjects()
 		{
-			ObjectFactory.Instance.Create<DummyObject>();
+			ObjectFactory.Instance.Create<SerializableObject>(2, 3.3f, "4", false);
 			var jsonString = ObjectFactory.Instance.SerializeObjects();
 
-			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"Value\":1}]}]"));
+			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"Value\":4},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"Value\":False},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"Value\":1}]}]"));
 		}
 
 		[Test]

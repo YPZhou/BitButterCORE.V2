@@ -37,7 +37,8 @@ namespace BitButterCORE.V2
 		{
 		}
 
-		public uint ID { get; }
+		[SerializeProperty]
+		public uint ID { get; private set; }
 
 		public IObjectReference<TObject> Reference { get; }
 

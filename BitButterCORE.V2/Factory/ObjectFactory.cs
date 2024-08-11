@@ -112,6 +112,12 @@ namespace BitButterCORE.V2
 			return result;
 		}
 
+		public string SerializeObjects()
+		{
+			var serializer = new ObjectSerializer();
+			return serializer.SerializeObjects(Query<IBaseObject>());
+		}
+
 		public void Remove(IObjectReference reference)
 		{
 			var objectToRemove = GetObjectByTypeAndID(reference.Type, reference.ID);

@@ -162,4 +162,28 @@ namespace BitButterCORE.V2.Testing
 			AdditionalProperty = templateName;
 		}
 	}
+
+	public class SerializableObject : BaseObject<SerializableObject>
+	{
+		public SerializableObject(uint id, int intValue, float floatValue, string stringValue, bool boolValue)
+			: base(id)
+		{
+			IntValue = intValue;
+			FloatValue = floatValue;
+			StringValue = stringValue;
+			BoolValue = boolValue;
+		}
+
+		[SerializeProperty]
+		public int IntValue { get; }
+
+		[SerializeProperty]
+		public float FloatValue { get; }
+
+		[SerializeProperty]
+		public string StringValue { get; }
+
+		[SerializeProperty]
+		public bool BoolValue { get; }
+	}
 }
