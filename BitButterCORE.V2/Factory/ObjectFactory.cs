@@ -18,7 +18,7 @@ namespace BitButterCORE.V2
 			return Create(objectType, newID, args);
 		}
 
-		IObjectReference Create(Type objectType, uint newID, params object[] args)
+		internal IObjectReference Create(Type objectType, uint newID, params object[] args)
 		{
 			var result = default(IObjectReference);
 			if (!objectType.IsAbstract)
@@ -40,12 +40,20 @@ namespace BitButterCORE.V2
 						inputParameters = inputParameters.Concat(constructor.GetParameters().Skip(inputParameters.Count()).Select(x => x.DefaultValue));
 					}
 
+					IDsInUse.Add(newID);
+					try
+					{
 					var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 					AddObjectToFactory(obj);
 					obj.OnObjectCreated();
 
 					result = obj.Reference;
 					UpdateFactoryChangeRecordsForAddObject(result);
+				}
+					finally
+					{
+						IDsInUse.Remove(newID);
+					}
 				}
 				else if (matchingConstructors.Count() > 1)
 				{
@@ -321,17 +329,15 @@ namespace BitButterCORE.V2
 			return IDFountains[objectType];
 		}
 
-		internal bool IsObjectIDUsed(Type objectType, uint id)
-		{
-			var result = false;
-			if (IDFountains.ContainsKey(objectType))
-			{
-				result = IDFountains[objectType].currentID >= id;
-			}
-			return result;
-		}
-
 		Dictionary<Type, ObjectIDFountain> IDFountains => idFountains ?? (idFountains = new Dictionary<Type, ObjectIDFountain>());
 		Dictionary<Type, ObjectIDFountain> idFountains;
+
+		internal bool IsObjectIDInUse(uint id)
+		{
+			return IDsInUse.Contains(id);
+		}
+
+		HashSet<uint> IDsInUse => idsInUse ?? (idsInUse = new HashSet<uint>());
+		HashSet<uint> idsInUse = new HashSet<uint>();
 	}
 }

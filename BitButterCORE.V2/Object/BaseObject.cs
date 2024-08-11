@@ -16,7 +16,7 @@ namespace BitButterCORE.V2
 			ID = id;
 			Reference = CreateTypedReference();
 
-			if (!ObjectFactory.Instance.IsObjectIDUsed(GetType(), ID))
+			if (!ObjectFactory.Instance.IsObjectIDInUse(ID))
 			{
 				throw new InvalidOperationException(string.Format("{0} should not be instantiated using its constructor, use ObjectFactory.Instance.Create<{1}>() instead.", GetType().FullName, GetType().Name));
 			}
