@@ -2,14 +2,15 @@
 {
 	internal class SimpleSerializePropertyInfo : SerializePropertyInfo
 	{
-		public SimpleSerializePropertyInfo(string name, object value)
-			: base(name, value)
+		public SimpleSerializePropertyInfo(string name, int ctorParameterOrder, object value)
+			: base(name, ctorParameterOrder, value)
 		{
 		}
 
 		public override string PopulateJsonString()
 		{
-			return $"{{\"Name\":\"{Name}\",\"Type\":\"{PropertyType}\",\"Value\":{Value}}}";
+			var ctorParameterOrderString = ConstructorParameterOrder >= 0 ? $"\"ConstructorParameterOrder\":{ConstructorParameterOrder}," : string.Empty;
+			return $"{{\"Name\":\"{Name}\",\"Type\":\"{PropertyType}\",{ctorParameterOrderString}\"Value\":{Value}}}";
 		}
 	}
 }

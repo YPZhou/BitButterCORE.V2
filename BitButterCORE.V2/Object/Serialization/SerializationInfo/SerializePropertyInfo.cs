@@ -2,16 +2,19 @@
 {
 	internal abstract class SerializePropertyInfo
 	{
-		public SerializePropertyInfo(string name, object value)
+		public SerializePropertyInfo(string name, int ctorParameterOrder, object value)
 		{
 			Name = name;
 			PropertyType = value.GetType().Name;
+			ConstructorParameterOrder = ctorParameterOrder;
 			Value = value;
 		}
 
 		public string Name { get; }
 
 		public string PropertyType { get; }
+
+		public int ConstructorParameterOrder { get; }
 
 		public object Value { get; }
 

@@ -174,16 +174,19 @@ namespace BitButterCORE.V2.Testing
 			BoolValue = boolValue;
 		}
 
-		[SerializeProperty]
+		[SerializeProperty(ctorParameterOrder: 1)]
 		public int IntValue { get; }
 
-		[SerializeProperty]
+		[SerializeProperty(ctorParameterOrder: 2)]
 		public float FloatValue { get; }
 
-		[SerializeProperty]
+		[SerializeProperty(ctorParameterOrder: 3)]
 		public string StringValue { get; }
 
-		[SerializeProperty]
+		[SerializeProperty(ctorParameterOrder: 4)]
 		public bool BoolValue { get; }
+
+		[SerializeProperty]
+		public int IntValue2 { get; } = 100;
 	}
 }

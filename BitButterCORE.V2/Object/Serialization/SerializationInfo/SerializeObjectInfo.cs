@@ -60,7 +60,7 @@ namespace BitButterCORE.V2
 			}
 			else
 			{
-				result = new SimpleSerializePropertyInfo(propertyInfo.Name, propertyValue);
+				result = new SimpleSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, propertyValue);
 			}
 
 			return result;
