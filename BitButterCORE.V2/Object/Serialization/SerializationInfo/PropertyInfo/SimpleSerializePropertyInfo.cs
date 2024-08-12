@@ -16,7 +16,13 @@ namespace BitButterCORE.V2
 
 		protected override string PopulateValueJsonString()
 		{
-			return Value.ToString();
+			var result = Value.ToString();
+			if (Value is bool boolValue)
+			{
+				result = boolValue ? "true" : "false"; 
+			}
+
+			return result;
 		}
 
 		protected override object PopulateValue(JsonNode valueNode)

@@ -163,6 +163,12 @@ namespace BitButterCORE.V2.Testing
 		}
 	}
 
+	public enum DummyEnum
+	{
+		ENUM1,
+		ENUM2,
+	}
+
 	public class SerializableObject : BaseObject<SerializableObject>
 	{
 		public SerializableObject(uint id, int intValue, float floatValue, string stringValue, bool boolValue)
@@ -188,6 +194,9 @@ namespace BitButterCORE.V2.Testing
 
 		[SerializeProperty]
 		public int IntValue2 { get; set; }
+
+		[SerializeProperty]
+		public DummyEnum DummyEnum { get; set; }
 	}
 
 	public class SerializableObjectWithObjectReference : BaseObject<SerializableObjectWithObjectReference>

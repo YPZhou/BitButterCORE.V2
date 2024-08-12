@@ -52,6 +52,7 @@ namespace BitButterCORE.V2
 						var propertyType = propertyObject["Type"].ToString();
 						if (propertyType == "Enum")
 						{
+							serializePropertyInfo = new EnumSerializePropertyInfo(propertyObject);
 						}
 						else if (propertyType == "Array")
 						{

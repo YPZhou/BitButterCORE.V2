@@ -51,13 +51,14 @@ namespace BitButterCORE.V2
 			var result = default(SerializePropertyInfo);
 			if (propertyValue is Enum)
 			{
+				result = new EnumSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, propertyValue);
 			}
 			else if (propertyValue is Array)
 			{
 			}
 			else if (typeof(IObjectReference).IsAssignableFrom(propertyInfo.PropertyType))
 			{
-				result = new ObjectReferenceSerializePropertyInfo(propertyInfo.Name, "ObjectReference", serializePropertyAttribute.ConstructorParameterOrder, (IObjectReference)propertyValue);
+				result = new ObjectReferenceSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, (IObjectReference)propertyValue);
 			}
 			else
 			{

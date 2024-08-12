@@ -7,8 +7,8 @@ namespace BitButterCORE.V2
 {
 	internal class ObjectReferenceSerializePropertyInfo : SerializePropertyInfo
 	{
-		public ObjectReferenceSerializePropertyInfo(string name, string propertyType, int ctorParameterOrder, IObjectReference value)
-			: base(name, propertyType, ctorParameterOrder, value)
+		public ObjectReferenceSerializePropertyInfo(string name, int ctorParameterOrder, IObjectReference value)
+			: base(name, "ObjectReference", ctorParameterOrder, value)
 		{
 			if (value != null)
 			{
