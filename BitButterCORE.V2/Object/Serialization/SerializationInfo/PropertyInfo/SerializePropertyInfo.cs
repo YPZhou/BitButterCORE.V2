@@ -4,10 +4,10 @@ namespace BitButterCORE.V2
 {
 	internal abstract class SerializePropertyInfo
 	{
-		public SerializePropertyInfo(string name, int ctorParameterOrder, object value)
+		public SerializePropertyInfo(string name, string propertyType, int ctorParameterOrder, object value)
 		{
 			Name = name;
-			PropertyType = value.GetType().Name;
+			PropertyType = propertyType;
 			ConstructorParameterOrder = ctorParameterOrder;
 			Value = value;
 		}
@@ -35,7 +35,15 @@ namespace BitButterCORE.V2
 
 		public object Value { get; private set; }
 
-		public abstract string PopulateJsonString();
+		public string PopulateJsonString()
+		{
+			var ctorParameterOrderString = ConstructorParameterOrder >= 0
+				? $"\"ConstructorParameterOrder\":{ConstructorParameterOrder},"
+				: string.Empty;
+			return $"{{\"Name\":\"{Name}\",\"Type\":\"{PropertyType}\",{ctorParameterOrderString}\"Value\":{PopulateValueJsonString()}}}";
+		}
+
+		protected abstract string PopulateValueJsonString();
 
 		protected abstract object PopulateValue(JsonNode valueNode);
 	}

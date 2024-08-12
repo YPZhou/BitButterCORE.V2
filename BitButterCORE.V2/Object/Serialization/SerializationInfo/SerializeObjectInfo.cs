@@ -36,7 +36,7 @@ namespace BitButterCORE.V2
 				var serializePropertyAttribute = propertyInfo.GetCustomAttribute<SerializePropertyAttribute>();
 				if (serializePropertyAttribute != null)
 				{
-					var propertyValue = propertyInfo.GetValue(BaseObject.Object, null);
+					var propertyValue = propertyInfo.GetValue(BaseObject.Object);
 					var serializePropertyInfo = CreateSerializePropertyInfo(propertyInfo, propertyValue, serializePropertyAttribute);
 					if (serializePropertyInfo != null)
 					{
@@ -55,12 +55,13 @@ namespace BitButterCORE.V2
 			else if (propertyValue is Array)
 			{
 			}
-			else if (propertyValue is IObjectReference)
+			else if (typeof(IObjectReference).IsAssignableFrom(propertyInfo.PropertyType))
 			{
+				result = new ObjectReferenceSerializePropertyInfo(propertyInfo.Name, "ObjectReference", serializePropertyAttribute.ConstructorParameterOrder, (IObjectReference)propertyValue);
 			}
 			else
 			{
-				result = new SimpleSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, propertyValue);
+				result = new SimpleSerializePropertyInfo(propertyInfo.Name, propertyValue.GetType().Name, serializePropertyAttribute.ConstructorParameterOrder, propertyValue);
 			}
 
 			return result;

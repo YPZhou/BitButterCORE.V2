@@ -189,4 +189,30 @@ namespace BitButterCORE.V2.Testing
 		[SerializeProperty]
 		public int IntValue2 { get; set; }
 	}
+
+	public class SerializableObjectWithObjectReference : BaseObject<SerializableObjectWithObjectReference>
+	{
+		public SerializableObjectWithObjectReference(uint id, IObjectReference<DummyObject2> dummyObject2)
+			: base(id)
+		{
+			DummyObject2 = dummyObject2;
+		}
+
+		[SerializeProperty]
+		public IObjectReference<DummyObject> DummyObject { get; set; }
+
+		[SerializeProperty(ctorParameterOrder: 1)]
+		public IObjectReference<DummyObject2> DummyObject2 { get; }
+	}
+
+	public class SerializableObjectWithObjectReference2 : BaseObject<SerializableObjectWithObjectReference2>
+	{
+		public SerializableObjectWithObjectReference2(uint id)
+			: base(id)
+		{
+		}
+
+		[SerializeProperty]
+		public IObjectReference<SerializableObjectWithObjectReference> SerializableObject { get; set; }
+	}
 }

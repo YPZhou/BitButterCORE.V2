@@ -58,6 +58,7 @@ namespace BitButterCORE.V2
 						}
 						else if (propertyType == "ObjectReference")
 						{
+							serializePropertyInfo = new ObjectReferenceSerializePropertyInfo(propertyObject);
 						}
 						else
 						{

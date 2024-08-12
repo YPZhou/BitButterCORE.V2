@@ -25,11 +25,7 @@ namespace BitButterCORE.V2
 			if (rootNode.GetValueKind() == JsonValueKind.Array)
 			{
 				var deserializeObjectInfos = ParseJsonArrayAsDeserializeObjectInfos(rootNode.AsArray());
-				
-				// Build object dependency graph
-				// ...
-
-				foreach (var deserializeObjectInfo in deserializeObjectInfos) // populate objects in dependency order
+				foreach (var deserializeObjectInfo in deserializeObjectInfos)
 				{
 					deserializeObjectInfo.PopulateObject();
 				}
