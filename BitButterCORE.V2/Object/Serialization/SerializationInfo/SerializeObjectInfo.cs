@@ -53,9 +53,6 @@ namespace BitButterCORE.V2
 			{
 				result = new EnumSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, propertyValue);
 			}
-			else if (propertyValue is Array)
-			{
-			}
 			else if (typeof(IObjectReference).IsAssignableFrom(propertyInfo.PropertyType))
 			{
 				result = new ObjectReferenceSerializePropertyInfo(propertyInfo.Name, serializePropertyAttribute.ConstructorParameterOrder, (IObjectReference)propertyValue);

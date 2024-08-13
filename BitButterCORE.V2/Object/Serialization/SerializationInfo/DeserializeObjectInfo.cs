@@ -54,9 +54,6 @@ namespace BitButterCORE.V2
 						{
 							serializePropertyInfo = new EnumSerializePropertyInfo(propertyObject);
 						}
-						else if (propertyType == "Array")
-						{
-						}
 						else if (propertyType == "ObjectReference")
 						{
 							serializePropertyInfo = new ObjectReferenceSerializePropertyInfo(propertyObject);
