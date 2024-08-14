@@ -19,7 +19,11 @@ namespace BitButterCORE.V2
 			var result = Value.ToString();
 			if (Value is bool boolValue)
 			{
-				result = boolValue ? "true" : "false"; 
+				result = boolValue ? "true" : "false";
+			}
+			else if (Value is string stringValue)
+			{
+				result = $"\"{stringValue}\"";
 			}
 
 			return result;
