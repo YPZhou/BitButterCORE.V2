@@ -27,18 +27,18 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestSerializeObjectsWithObjectReference()
 		{
-			var objectReference = ObjectFactory.Instance.Create<SerializableObjectWithObjectReference2>();
+			var objectReference = ObjectFactory.Instance.Create<Object>();
 			var dummyObject = ObjectFactory.Instance.Create<DummyObject2>();
-			var objectReference2 = ObjectFactory.Instance.Create<SerializableObjectWithObjectReference>(dummyObject);
+			var objectReference2 = ObjectFactory.Instance.Create<String>(dummyObject);
 			objectReference.Object.SerializableObject = objectReference2;
 			var jsonString = ObjectFactory.Instance.SerializeObjects();
 
-			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObjectWithObjectReference2\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]"));
+			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"Object\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"String\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"String\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]"));
 
 			objectReference2.Object.DummyObject = ObjectFactory.Instance.Create<DummyObject>();
 			jsonString = ObjectFactory.Instance.SerializeObjects();
 
-			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObjectWithObjectReference2\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"DummyObject\",\"ID\":1}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]"));
+			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"Object\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"String\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"String\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"DummyObject\",\"ID\":1}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]"));
 		}
 
 		[Test]
@@ -62,24 +62,24 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestDeserializeObjectsWithObjectReference()
 		{
-			var jsonString = "[{\"ObjectType\":\"SerializableObjectWithObjectReference2\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]";
+			var jsonString = "[{\"ObjectType\":\"Object\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"String\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"String\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]";
 			ObjectFactory.Instance.DeserializeObjects(jsonString);
 
-			var objectReference = ObjectFactory.Instance.QueryFirst<SerializableObjectWithObjectReference>();
+			var objectReference = ObjectFactory.Instance.QueryFirst<String>();
 			Assert.That(objectReference.Object.DummyObject, Is.Null);
 			Assert.That(objectReference.Object.DummyObject2, Is.Not.Null.With.Property("IsValid").EqualTo(true));
 
-			var objectReference2 = ObjectFactory.Instance.QueryFirst<SerializableObjectWithObjectReference2>();
+			var objectReference2 = ObjectFactory.Instance.QueryFirst<Object>();
 			Assert.That(objectReference2.Object.SerializableObject, Is.Not.Null.With.Property("IsValid").EqualTo(true));
 
-			jsonString = "[{\"ObjectType\":\"SerializableObjectWithObjectReference2\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"SerializableObjectWithObjectReference\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"DummyObject\",\"ID\":1}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]";
+			jsonString = "[{\"ObjectType\":\"Object\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"String\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"String\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"DummyObject\",\"ID\":1}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]";
 			ObjectFactory.Instance.DeserializeObjects(jsonString);
 
-			objectReference = ObjectFactory.Instance.QueryFirst<SerializableObjectWithObjectReference>();
+			objectReference = ObjectFactory.Instance.QueryFirst<String>();
 			Assert.That(objectReference.Object.DummyObject, Is.Not.Null.With.Property("IsValid").EqualTo(true));
 			Assert.That(objectReference.Object.DummyObject2, Is.Not.Null.With.Property("IsValid").EqualTo(true));
 
-			objectReference2 = ObjectFactory.Instance.QueryFirst<SerializableObjectWithObjectReference2>();
+			objectReference2 = ObjectFactory.Instance.QueryFirst<Object>();
 			Assert.That(objectReference2.Object.SerializableObject, Is.Not.Null.With.Property("IsValid").EqualTo(true));
 		}
 	}

@@ -50,7 +50,10 @@ namespace BitButterCORE.V2
 				var valueObject = valueNode.AsObject();
 				if (valueObject.TryGetPropertyValue("ObjectType", out var objectTypeName))
 				{
-					var objectType = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).SingleOrDefault(type => type.Name.Equals(objectTypeName.ToString()));
+					var objectType = AppDomain.CurrentDomain.GetAssemblies()
+						.SelectMany(assembly => assembly.GetTypes())
+						.SingleOrDefault(type => typeof(IBaseObject).IsAssignableFrom(type)
+												&& type.Name.Equals(objectTypeName.ToString()));
 					var id = uint.Parse(valueObject["ID"].ToString());
 					result = CreateTypedReference(objectType, id);
 				}

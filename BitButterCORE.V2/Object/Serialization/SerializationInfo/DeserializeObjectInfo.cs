@@ -18,7 +18,10 @@ namespace BitButterCORE.V2
 		public void PopulateObject()
 		{
 			var objectTypeValue = JsonObject["ObjectType"].ToString();
-			var objectType = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).SingleOrDefault(type => type.Name.Equals(objectTypeValue));
+			var objectType = AppDomain.CurrentDomain.GetAssemblies()
+				.SelectMany(assembly => assembly.GetTypes())
+				.SingleOrDefault(type => typeof(IBaseObject).IsAssignableFrom(type)
+										&& type.Name.Equals(objectTypeValue));
 
 			if (objectType != null)
 			{

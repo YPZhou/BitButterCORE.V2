@@ -199,9 +199,9 @@ namespace BitButterCORE.V2.Testing
 		public DummyEnum DummyEnum { get; set; }
 	}
 
-	public class SerializableObjectWithObjectReference : BaseObject<SerializableObjectWithObjectReference>
+	public class String : BaseObject<String>
 	{
-		public SerializableObjectWithObjectReference(uint id, IObjectReference<DummyObject2> dummyObject2)
+		public String(uint id, IObjectReference<DummyObject2> dummyObject2)
 			: base(id)
 		{
 			DummyObject2 = dummyObject2;
@@ -214,14 +214,14 @@ namespace BitButterCORE.V2.Testing
 		public IObjectReference<DummyObject2> DummyObject2 { get; }
 	}
 
-	public class SerializableObjectWithObjectReference2 : BaseObject<SerializableObjectWithObjectReference2>
+	public class Object : BaseObject<Object>
 	{
-		public SerializableObjectWithObjectReference2(uint id)
+		public Object(uint id)
 			: base(id)
 		{
 		}
 
 		[SerializeProperty]
-		public IObjectReference<SerializableObjectWithObjectReference> SerializableObject { get; set; }
+		public IObjectReference<String> SerializableObject { get; set; }
 	}
 }
