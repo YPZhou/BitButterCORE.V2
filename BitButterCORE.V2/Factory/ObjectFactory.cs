@@ -46,7 +46,7 @@ namespace BitButterCORE.V2
 						var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 						AddObjectToFactory(obj);
 
-						if (isDeserializing)
+						if (IsDeserializing)
 						{
 							obj.OnObjectLoaded();
 						}
@@ -141,17 +141,17 @@ namespace BitButterCORE.V2
 
 			try
 			{
-				isDeserializing = true;
+				IsDeserializing = true;
 				var deserializer = new ObjectSerializer();
 				deserializer.DeserializeObjects(jsonString);
 			}
 			finally
 			{
-				isDeserializing = false;
+				IsDeserializing = false;
 			}
 		}
 
-		bool isDeserializing = false;
+		public bool IsDeserializing { get; private set; }
 
 		public void Remove(IObjectReference reference)
 		{
