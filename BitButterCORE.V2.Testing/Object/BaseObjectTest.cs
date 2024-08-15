@@ -64,6 +64,14 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestOnObjectCreatedCalled()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(objectReference.Object.OnObjectCreatedCalled, Is.True);
+			Assert.That(objectReference.Object.OnObjectLoadedCalled, Is.False);
+		}
+
+		[Test]
 		public void TestAccessObjectInOnObjectCreated()
 		{
 			Assert.DoesNotThrow(() => ObjectFactory.Instance.Create<DummyObjectAccessObjectPropertyByReferenceInOnObjectCreated>());

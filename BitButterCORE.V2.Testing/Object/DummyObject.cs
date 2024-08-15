@@ -10,6 +10,19 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		public string Name => string.Format("DummyObject{0}", ID);
+
+		protected override void OnObjectCreatedCore()
+		{
+			OnObjectCreatedCalled = true;
+		}
+
+		protected override void OnObjectLoadedCore()
+		{
+			OnObjectLoadedCalled = true;
+		}
+
+		public bool OnObjectCreatedCalled { get; private set; } = false;
+		public bool OnObjectLoadedCalled { get; private set; } = false;
 	}
 
 	public class DummyObject2 : BaseObject<DummyObject2>

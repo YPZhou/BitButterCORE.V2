@@ -60,6 +60,21 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestOnObjectLoadedCalled()
+		{
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(objectReference.Object.OnObjectCreatedCalled, Is.True);
+			Assert.That(objectReference.Object.OnObjectLoadedCalled, Is.False);
+
+			var jsonString = ObjectFactory.Instance.SerializeObjects();
+			ObjectFactory.Instance.DeserializeObjects(jsonString);
+
+			objectReference = ObjectFactory.Instance.QueryFirst<DummyObject>();
+			Assert.That(objectReference.Object.OnObjectCreatedCalled, Is.False);
+			Assert.That(objectReference.Object.OnObjectLoadedCalled, Is.True);
+		}
+
+		[Test]
 		public void TestDeserializeObjectsWithObjectReference()
 		{
 			var jsonString = "[{\"ObjectType\":\"Object\",\"Properties\":[{\"Name\":\"SerializableObject\",\"Type\":\"ObjectReference\",\"Value\":{\"ObjectType\":\"String\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"DummyObject2\",\"Properties\":[{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]},{\"ObjectType\":\"String\",\"Properties\":[{\"Name\":\"DummyObject\",\"Type\":\"ObjectReference\",\"Value\":{}},{\"Name\":\"DummyObject2\",\"Type\":\"ObjectReference\",\"ConstructorParameterOrder\":1,\"Value\":{\"ObjectType\":\"DummyObject2\",\"ID\":1}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1}]}]";

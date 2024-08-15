@@ -40,12 +40,20 @@ namespace BitButterCORE.V2
 						inputParameters = inputParameters.Concat(constructor.GetParameters().Skip(inputParameters.Count()).Select(x => x.DefaultValue));
 					}
 
-					IDsInUse.Add(newID);
 					try
 					{
+						IDsInUse.Add(newID);
 						var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 						AddObjectToFactory(obj);
-						obj.OnObjectCreated();
+
+						if (isDeserializing)
+						{
+							obj.OnObjectLoaded();
+						}
+						else
+						{
+							obj.OnObjectCreated();
+						}
 
 						result = obj.Reference;
 						UpdateFactoryChangeRecordsForAddObject(result);
@@ -131,9 +139,19 @@ namespace BitButterCORE.V2
 			RemoveAll();
 			ClearChanges();
 
-			var deserializer = new ObjectSerializer();
-			deserializer.DeserializeObjects(jsonString);
+			try
+			{
+				isDeserializing = true;
+				var deserializer = new ObjectSerializer();
+				deserializer.DeserializeObjects(jsonString);
+			}
+			finally
+			{
+				isDeserializing = false;
+			}
 		}
+
+		bool isDeserializing = false;
 
 		public void Remove(IObjectReference reference)
 		{

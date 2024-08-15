@@ -7,6 +7,7 @@ namespace BitButterCORE.V2
 		uint ID { get; }
 		IObjectReference Reference { get; }
 		void OnObjectCreated();
+		void OnObjectLoaded();
 	}
 
 	public abstract class BaseObject<TObject> : IBaseObject where TObject : IBaseObject
@@ -33,7 +34,16 @@ namespace BitButterCORE.V2
 			OnObjectCreatedCore();
 		}
 
+		void IBaseObject.OnObjectLoaded()
+		{
+			OnObjectLoadedCore();
+		}
+
 		protected virtual void OnObjectCreatedCore()
+		{
+		}
+
+		protected virtual void OnObjectLoadedCore()
 		{
 		}
 
