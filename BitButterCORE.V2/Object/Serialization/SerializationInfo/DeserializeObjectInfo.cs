@@ -106,6 +106,8 @@ namespace BitButterCORE.V2
 				var propertyInfo = objectType.GetProperty(otherProperty.Name);
 				propertyInfo.SetValue(deserializedObject.Object, otherProperty.Value);
 			}
+
+			deserializedObject.Object.OnObjectLoaded();
 		}
 	}
 }

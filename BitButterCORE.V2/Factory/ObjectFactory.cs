@@ -46,11 +46,7 @@ namespace BitButterCORE.V2
 						var obj = (IBaseObject)constructor.Invoke(inputParameters.ToArray());
 						AddObjectToFactory(obj);
 
-						if (IsDeserializing)
-						{
-							obj.OnObjectLoaded();
-						}
-						else
+						if (!IsDeserializing)
 						{
 							obj.OnObjectCreated();
 						}

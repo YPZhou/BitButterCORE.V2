@@ -60,18 +60,16 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
-		public void TestOnObjectLoadedCalled()
+		public void TestOnObjectLoadedCalledAfterObjectFullyDeserialized()
 		{
-			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
-			Assert.That(objectReference.Object.OnObjectCreatedCalled, Is.True);
-			Assert.That(objectReference.Object.OnObjectLoadedCalled, Is.False);
+			var objectReference = ObjectFactory.Instance.Create<SerializableObject>(2, 3.3f, "4", false);
+			objectReference.Object.IntValue2 = 100;
 
 			var jsonString = ObjectFactory.Instance.SerializeObjects();
 			ObjectFactory.Instance.DeserializeObjects(jsonString);
 
-			objectReference = ObjectFactory.Instance.QueryFirst<DummyObject>();
-			Assert.That(objectReference.Object.OnObjectCreatedCalled, Is.False);
-			Assert.That(objectReference.Object.OnObjectLoadedCalled, Is.True);
+			objectReference = ObjectFactory.Instance.QueryFirst<SerializableObject>();
+			Assert.That(objectReference.Object.PropertySetOnObjectLoaded, Is.EqualTo(100));
 		}
 
 		[Test]

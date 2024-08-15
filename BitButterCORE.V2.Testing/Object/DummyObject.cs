@@ -210,6 +210,13 @@ namespace BitButterCORE.V2.Testing
 
 		[SerializeProperty]
 		public DummyEnum DummyEnum { get; set; }
+
+		public int PropertySetOnObjectLoaded { get; private set; }
+
+		protected override void OnObjectLoadedCore()
+		{
+			PropertySetOnObjectLoaded = IntValue2;
+		}
 	}
 
 	public class String : BaseObject<String>
