@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace BitButterCORE.V2
@@ -31,7 +32,7 @@ namespace BitButterCORE.V2
 		void PopulateSerializePropertyInfo()
 		{
 			Properties.Clear();
-			foreach (var propertyInfo in ObjectType.GetProperties())
+			foreach (var propertyInfo in ObjectType.GetProperties().OrderBy(propertyInfo => propertyInfo.Name))
 			{
 				var serializePropertyAttribute = propertyInfo.GetCustomAttribute<SerializePropertyAttribute>();
 				if (serializePropertyAttribute != null)
