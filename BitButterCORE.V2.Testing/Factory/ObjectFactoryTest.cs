@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -51,9 +52,20 @@ namespace BitButterCORE.V2.Testing
 			ObjectFactory.Instance.Create<DummyObject>();
 
 			var methodInfo = typeof(ObjectFactory).GetMethod("Create", BindingFlags.Instance | BindingFlags.NonPublic);
-			Assert.That(() => methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject), 1u, null }),
+			Assert.That(() => methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject), 1u, Array.Empty<object>() }),
 				Throws.TargetInvocationException.With.InnerException.With.Message.EqualTo("Instantiation of BitButterCORE.V2.Testing.DummyObject failed because of duplicate ID 1"),
 				"Should throw exception when create object with duplicate ID");
+		}
+
+		[Test]
+		public void TestCreateWithIDUpdateIDFountain()
+		{
+			var methodInfo = typeof(ObjectFactory).GetMethod("Create", BindingFlags.Instance | BindingFlags.NonPublic);
+			methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject), 1u, Array.Empty<object>() });
+			methodInfo.Invoke(ObjectFactory.Instance, new object[] { typeof(DummyObject), 3u, Array.Empty<object>() });
+
+			var objectReference = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(objectReference.ID, Is.EqualTo(4), "Should create new object with next available ID 4");
 		}
 
 		[Test]

@@ -12,7 +12,24 @@
 			this.currentID = currentID;
 		}
 
-		public uint NextID => currentID++;
-		public uint currentID;
+		internal void SetToNextAvailableID(uint newID)
+		{
+			if (newID >= currentID)
+			{
+				currentID = newID + 1;
+			}
+		}
+
+		public uint NextID
+		{
+			get
+			{
+				var result = currentID;
+				currentID += 1;
+				return result;
+			}
+		}
+
+		uint currentID;
 	}
 }

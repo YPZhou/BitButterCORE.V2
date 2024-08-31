@@ -29,6 +29,7 @@ namespace BitButterCORE.V2
 					throw new InvalidOperationException(string.Format("Instantiation of {0} failed because of duplicate ID {1}", objectType.FullName, newID));
 				}
 
+				GetObjectIDFountain(objectType).SetToNextAvailableID(newID);
 				var constructors = objectType.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
 				var matchingConstructors = FindMatchingConstructors(constructors, args);
 				if (matchingConstructors.Count() == 1)
