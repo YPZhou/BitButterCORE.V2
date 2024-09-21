@@ -21,7 +21,7 @@ namespace BitButterCORE.V2.Testing
 
 			var jsonString = ObjectFactory.Instance.SerializeObjects();
 
-			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1},{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"}]}]"));
+			Assert.That(jsonString, Is.EqualTo("[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1},{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ReadOnlyValue\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"}]}]"));
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace BitButterCORE.V2.Testing
 		[Test]
 		public void TestDeserializeObjects()
 		{
-			var jsonString = "[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":2}]}]";
+			var jsonString = "[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"NonExistingValue\",\"Type\":\"Int32\",\"Value\":99},{\"Name\":\"ReadOnlyValue\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":2}]}]";
 			ObjectFactory.Instance.DeserializeObjects(jsonString);
 
 			var objectReference = ObjectFactory.Instance.QueryFirst<SerializableObject>();

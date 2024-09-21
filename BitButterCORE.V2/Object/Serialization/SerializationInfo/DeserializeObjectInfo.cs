@@ -101,10 +101,13 @@ namespace BitButterCORE.V2
 
 			var deserializedObject = ObjectFactory.Instance.Create(objectType, objectID, ctorParameters);
 
-			foreach (var otherProperty in normalProperties)
+			foreach (var normalProperty in normalProperties)
 			{
-				var propertyInfo = objectType.GetProperty(otherProperty.Name);
-				propertyInfo.SetValue(deserializedObject.Object, otherProperty.Value);
+				var propertyInfo = objectType.GetProperty(normalProperty.Name);
+				if (propertyInfo != null && propertyInfo.SetMethod != null)
+				{
+					propertyInfo.SetValue(deserializedObject.Object, normalProperty.Value);
+				}
 			}
 
 			deserializedObject.Object.OnObjectLoaded();

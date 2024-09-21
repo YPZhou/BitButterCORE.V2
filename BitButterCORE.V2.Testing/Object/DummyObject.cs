@@ -219,6 +219,9 @@ namespace BitButterCORE.V2.Testing
 		[SerializeProperty]
 		public DummyEnum DummyEnum { get; set; }
 
+		[SerializeProperty]
+		public int ReadOnlyValue => 100;
+
 		public int PropertySetOnObjectLoaded { get; private set; }
 
 		protected override void OnObjectLoadedCore()
