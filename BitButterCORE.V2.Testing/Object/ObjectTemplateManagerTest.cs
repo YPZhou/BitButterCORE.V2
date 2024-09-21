@@ -31,12 +31,13 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(template1["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
 
 			var template2 = objectTemplates["DummyObject2"];
-			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty", "ReadOnlyProperty" }), "Should contain 6 properties");
 			Assert.That(template2["StringProperty"], Is.EqualTo("TestString2"), "String property");
 			Assert.That(template2["IntProperty"], Is.EqualTo(321), "Int property");
 			Assert.That(template2["FloatProperty"], Is.EqualTo(3.21f), "Float property");
 			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
 			Assert.That(template2["ListProperty"], Is.EquivalentTo(new object[] { "456", 456, 4.56f, false }), "List property");
+			Assert.That(template2["ReadOnlyProperty"], Is.EqualTo("ReadOnly"), "ReadOnly string property");
 		}
 
 		[Test]
@@ -71,12 +72,13 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(template1["ListProperty"], Is.EquivalentTo(new object[] { "123", 123, 1.23f, true }), "List property");
 
 			var template2 = objectTemplates["DummyObject2"];
-			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(template2.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty", "ReadOnlyProperty" }), "Should contain 6 properties");
 			Assert.That(template2["StringProperty"], Is.EqualTo("TestString3"), "String property");
 			Assert.That(template2["IntProperty"], Is.EqualTo(456), "Int property");
 			Assert.That(template2["FloatProperty"], Is.EqualTo(4.56f), "Float property");
 			Assert.That(template2["BoolProperty"], Is.EqualTo(false), "Bool property");
 			Assert.That(template2["ListProperty"], Is.EquivalentTo(new object[] { "789", 789, 7.89f, true }), "List property");
+			Assert.That(template2["ReadOnlyProperty"], Is.EqualTo("ReadOnly"), "ReadOnly string property");
 
 			var template3 = objectTemplates["DummyObject3"];
 			Assert.That(template3.Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
@@ -154,7 +156,7 @@ namespace BitButterCORE.V2.Testing
 				"Should throw exception when object template name does not exist");
 
 			Assert.That(ObjectTemplateManager.Instance["DummyObject1"].Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
-			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty" }), "Should contain 5 properties");
+			Assert.That(ObjectTemplateManager.Instance["DummyObject2"].Keys, Is.EquivalentTo(new[] { "StringProperty", "IntProperty", "FloatProperty", "BoolProperty", "ListProperty", "ReadOnlyProperty" }), "Should contain 6 properties");
 		}
 	}
 }

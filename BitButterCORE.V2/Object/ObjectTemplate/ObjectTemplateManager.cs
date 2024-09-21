@@ -158,20 +158,23 @@ namespace BitButterCORE.V2
 			foreach (var templateProperty in template)
 			{
 				var objectPropertyInfo = templateObject.GetType().GetProperty(templateProperty.Key, BindingFlags.Public | BindingFlags.Instance);
-				if (templateProperty.Value is IList templateList)
+				if (objectPropertyInfo != null)
 				{
-					var objectList = objectPropertyInfo?.GetValue(templateObject) as IList;
-					if (objectList != null)
+					if (templateProperty.Value is IList templateList)
 					{
-						foreach (var value in templateList)
+						var objectList = objectPropertyInfo?.GetValue(templateObject) as IList;
+						if (objectList != null)
 						{
-							objectList.Add(value);
+							foreach (var value in templateList)
+							{
+								objectList.Add(value);
+							}
 						}
 					}
-				}
-				else
-				{
-					objectPropertyInfo?.SetValue(templateObject, templateProperty.Value);
+					else if (objectPropertyInfo.SetMethod != null)
+					{
+						objectPropertyInfo?.SetValue(templateObject, templateProperty.Value);
+					}
 				}
 			}
 

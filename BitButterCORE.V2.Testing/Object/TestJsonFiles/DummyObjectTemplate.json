@@ -24,7 +24,8 @@
         456,
         4.56,
         false
-      ]
+      ],
+      "ReadOnlyProperty": "ReadOnly"
     }
   }
 ]

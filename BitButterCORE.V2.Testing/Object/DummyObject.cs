@@ -168,11 +168,19 @@ namespace BitButterCORE.V2.Testing
 		public List<object> ListProperty => listProperty ??= new List<object>();
 		List<object> listProperty;
 
+		public string ReadOnlyProperty => readOnlyField;
+		string readOnlyField;
+
 		public string AdditionalProperty { get; private set; }
 
-		void ITemplateObject.SetupObjectFromTemplate(string templateName, Dictionary<string, object> _)
+		void ITemplateObject.SetupObjectFromTemplate(string templateName, Dictionary<string, object> template)
 		{
 			AdditionalProperty = templateName;
+
+			if (template.ContainsKey("ReadOnlyProperty"))
+			{
+				readOnlyField = (string)template["ReadOnlyProperty"];
+			}
 		}
 	}
 
