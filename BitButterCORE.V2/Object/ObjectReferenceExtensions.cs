@@ -1,4 +1,4 @@
-﻿namespace BitButterCORE.V2.Object
+﻿namespace BitButterCORE.V2
 {
 	public static class ObjectReferenceExtensions
 	{
