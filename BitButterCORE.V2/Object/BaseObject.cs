@@ -39,10 +39,18 @@ namespace BitButterCORE.V2
 			OnObjectLoadedCore();
 		}
 
+		/// <summary>
+		/// Called when the object is created.
+		/// Won't be called when the object is deserialized.
+		/// </summary>
 		protected virtual void OnObjectCreatedCore()
 		{
 		}
 
+		/// <summary>
+		/// Called when the object is deserialized.
+		/// Won't be called when the object is created.
+		/// </summary>
 		protected virtual void OnObjectLoadedCore()
 		{
 		}
