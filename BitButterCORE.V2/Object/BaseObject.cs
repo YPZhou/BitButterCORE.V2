@@ -62,6 +62,9 @@ namespace BitButterCORE.V2
 
 		IObjectReference IBaseObject.Reference => Reference;
 
+		public ObjectFactory Factory => ObjectFactory.Instance;
+		public EventManager EventManager => EventManager.Instance;
+
 		public override string ToString()
 		{
 			return string.Format("{0}{1}", GetType().Name, ID);

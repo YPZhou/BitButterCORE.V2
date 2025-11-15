@@ -51,6 +51,20 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestFactory()
+		{
+			var baseObject = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(baseObject.Object.Factory, Is.SameAs(ObjectFactory.Instance), "Should get instance of ObjectFactory");
+		}
+
+		[Test]
+		public void TestEventManager()
+		{
+			var baseObject = ObjectFactory.Instance.Create<DummyObject>();
+			Assert.That(baseObject.Object.EventManager, Is.SameAs(EventManager.Instance), "Should get instance of EventManager");
+		}
+
+		[Test]
 		public void TestToString()
 		{
 			var object1 = ObjectFactory.Instance.Create<DummyObject>().Object;
