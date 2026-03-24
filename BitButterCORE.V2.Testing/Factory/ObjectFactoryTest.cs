@@ -381,5 +381,31 @@ namespace BitButterCORE.V2.Testing
 			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject>(obj => obj.ID == dummyObject2.ID).ID, Is.EqualTo(dummyObject2.ID), "Should find 2nd dummy object when query with predicate");
 			Assert.That(ObjectFactory.Instance.QueryFirst<DummyObject2>(), Is.EqualTo(default(IObjectReference)), "Should return default reference when no object is found");
 		}
+
+		[Test]
+		public void TestQueryHeapAllocation()
+		{
+			for (var i = 0; i < 10; i++)
+			{
+				ObjectFactory.Instance.Create<DummyObject>();
+			}
+
+			Predicate<DummyObject> cachedPredicate = obj => obj.ID % 2 == 0;
+			foreach (var obj in ObjectFactory.Instance.Query(cachedPredicate)) { }
+
+			var allocatedBytes = GC.GetAllocatedBytesForCurrentThread();
+
+			foreach (var obj in ObjectFactory.Instance.Query<DummyObject>())
+			{
+				_ = obj.ID;
+			}
+
+			foreach (var obj in ObjectFactory.Instance.Query(cachedPredicate))
+			{
+				_ = obj.ID;
+			}
+
+			Assert.That(GC.GetAllocatedBytesForCurrentThread() - allocatedBytes, Is.EqualTo(0), "Calling Query() should cause no heap allocation");
+		}
 	}
 }

@@ -291,35 +291,9 @@ namespace BitButterCORE.V2
 			return null;
 		}
 
-		public IEnumerable<IObjectReference<TObject>> Query<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject
+		public QueryEnumerator<TObject> Query<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject
 		{
-			var objectType = typeof(TObject);
-			var objectCollection = new List<TObject>();
-
-			if (Factory.TryGetValue(objectType, out var typeFactory))
-			{
-				objectCollection.AddRange(typeFactory.Values.OfType<TObject>());
-			}
-
-			foreach (var key in Factory.Keys)
-			{
-				if (objectType != key && objectType.IsAssignableFrom(key))
-				{
-					objectCollection.AddRange(Factory[key].Values.OfType<TObject>());
-				}
-			}
-
-			if (objectCollection.Count > 0)
-			{
-				foreach (var obj in objectCollection)
-				{
-					var queryResult = predicate?.Invoke(obj) ?? true;
-					if (queryResult)
-					{
-						yield return (IObjectReference<TObject>)obj.Reference;
-					}
-				}
-			}
+			return new QueryEnumerator<TObject>(Factory, predicate);
 		}
 
 		public IObjectReference<TObject> QueryFirst<TObject>(Predicate<TObject> predicate = null) where TObject : IBaseObject => Query(predicate).FirstOrDefault();
