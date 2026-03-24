@@ -42,6 +42,20 @@ namespace BitButterCORE.V2.Testing
 		}
 
 		[Test]
+		public void TestSerializeObjectsWithExcludeSerializeObjectAttribute()
+		{
+			var objectReference = ObjectFactory.Instance.Create<SerializableObject>(2, 3.3f, "4", false);
+			objectReference.Object.IntValue2 = 100;
+			objectReference.Object.DummyEnum = DummyEnum.ENUM2;
+			ObjectFactory.Instance.Create<NonSerializableObject>();
+			var jsonString = ObjectFactory.Instance.SerializeObjects();
+
+			Assert.That(jsonString,
+				Is.EqualTo("[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":1},{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ReadOnlyValue\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"}]}]"),
+				"NonSerializableObject should not be serialized");
+		}
+
+		[Test]
 		public void TestDeserializeObjects()
 		{
 			var jsonString = "[{\"ObjectType\":\"SerializableObject\",\"Properties\":[{\"Name\":\"IntValue\",\"Type\":\"Int32\",\"ConstructorParameterOrder\":1,\"Value\":2},{\"Name\":\"FloatValue\",\"Type\":\"Single\",\"ConstructorParameterOrder\":2,\"Value\":3.3},{\"Name\":\"StringValue\",\"Type\":\"String\",\"ConstructorParameterOrder\":3,\"Value\":\"4\"},{\"Name\":\"BoolValue\",\"Type\":\"Boolean\",\"ConstructorParameterOrder\":4,\"Value\":false},{\"Name\":\"IntValue2\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"DummyEnum\",\"Type\":\"Enum\",\"Value\":{\"EnumType\":\"DummyEnum\",\"Value\":\"ENUM2\"}},{\"Name\":\"NonExistingValue\",\"Type\":\"Int32\",\"Value\":99},{\"Name\":\"ReadOnlyValue\",\"Type\":\"Int32\",\"Value\":100},{\"Name\":\"ID\",\"Type\":\"UInt32\",\"ConstructorParameterOrder\":0,\"Value\":2}]}]";

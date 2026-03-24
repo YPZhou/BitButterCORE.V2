@@ -230,6 +230,15 @@ namespace BitButterCORE.V2.Testing
 		}
 	}
 
+	[ExcludeSerializeObject]
+	public class NonSerializableObject : BaseObject<NonSerializableObject>
+	{
+		public NonSerializableObject(uint id)
+			: base(id)
+		{
+		}
+	}
+
 	public class String : BaseObject<String>
 	{
 		public String(uint id, IObjectReference<DummyObject2> dummyObject2)

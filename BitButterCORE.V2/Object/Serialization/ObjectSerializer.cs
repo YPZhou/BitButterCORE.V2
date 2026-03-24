@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -12,8 +13,12 @@ namespace BitButterCORE.V2
 			var objectJsonStrings = new List<string>();
 			foreach (var serializeObject in objects)
 			{
-				var serializeObjectInfo = new SerializeObjectInfo(serializeObject);
-				objectJsonStrings.Add(serializeObjectInfo.PopulateJsonString());
+				var excludeSerializeObjectAttr = serializeObject.Type.GetCustomAttribute<ExcludeSerializeObjectAttribute>();
+				if (excludeSerializeObjectAttr == null)
+				{
+					var serializeObjectInfo = new SerializeObjectInfo(serializeObject);
+					objectJsonStrings.Add(serializeObjectInfo.PopulateJsonString());
+				}
 			}
 
 			return $"[{string.Join(",", objectJsonStrings)}]";
